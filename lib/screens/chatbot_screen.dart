@@ -230,41 +230,79 @@ import 'dart:convert';
         alignment: msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          padding: const EdgeInsets.all(12),
-          constraints: const BoxConstraints(maxWidth: 280),
+          padding: const EdgeInsets.all(14),
+          constraints: const BoxConstraints(maxWidth: 300),
           decoration: BoxDecoration(
             color: msg.isUser
-                ? const Color(0xFFF05151)
-                : Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(14),
+                ? const Color(0xFFFFEBEE)
+                : Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: MarkdownBody(
-    data: msg.text,
-    selectable: true,
-    styleSheet: MarkdownStyleSheet(
-      p: TextStyle(
-        color: msg.isUser ? Colors.white : Colors.black87,
-        fontSize: 15,
-      ),
-      strong: TextStyle(
-        color: msg.isUser ? Colors.white : Colors.black87,
-        fontWeight: FontWeight.bold,
-      ),
-      em: TextStyle(
-        color: msg.isUser ? Colors.white : Colors.black87,
-        fontStyle: FontStyle.italic,
-      ),
-      h3: TextStyle(
-        color: msg.isUser ? Colors.white : Colors.black87,
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
-      listBullet: TextStyle(
-        color: msg.isUser ? Colors.white : Colors.black87,
-      ),
-    ),
-  ),
-
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!msg.isUser)
+                Container(
+                  width: 28,
+                  height: 28,
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE85D75),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.auto_awesome,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              Flexible(
+                child: MarkdownBody(
+                  data: msg.text,
+                  selectable: true,
+                  styleSheet: MarkdownStyleSheet(
+                    p: GoogleFonts.poppins(
+                      color: Colors.black87,
+                      fontSize: 14,
+                      height: 1.4,
+                    ),
+                    strong: GoogleFonts.poppins(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    em: GoogleFonts.poppins(
+                      color: Colors.black87,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    h3: GoogleFonts.poppins(
+                      color: Colors.black87,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    listBullet: GoogleFonts.poppins(
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ),
+              if (msg.isUser)
+                Container(
+                  width: 28,
+                  height: 28,
+                  margin: const EdgeInsets.only(left: 8),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE85D75),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+            ],
+          ),
         ),
       );
     }
@@ -272,36 +310,59 @@ import 'dart:convert';
 
     Widget _buildInputBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 6),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
         ],
       ),
       child: Row(
         children: [
-
           /// TEXT FIELD
           Expanded(
-            child: TextField(
-              controller: _controller,
-              enabled: !_rateLimited,
-              decoration: InputDecoration(
-                hintText: "Ask anything",
-                hintStyle: GoogleFonts.poppins(color: Colors.grey),
-                border: InputBorder.none,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: TextField(
+                controller: _controller,
+                enabled: !_rateLimited,
+                style: GoogleFonts.poppins(),
+                decoration: InputDecoration(
+                  hintText: "Ask about stocks, markets, or trends...",
+                  hintStyle: GoogleFonts.poppins(
+                    color: Colors.grey.shade500,
+                    fontSize: 14,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                ),
+                onSubmitted: (_) => _sendMessage(),
               ),
             ),
           ),
 
-          /// ➤ SEND BUTTON
-          IconButton(
-            icon: const Icon(
-              Icons.send,
-              color: Color(0xFFF05151),
+          const SizedBox(width: 12),
+
+          /// SEND BUTTON
+          Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: Color(0xFFE85D75),
+              shape: BoxShape.circle,
             ),
-            onPressed: (_loading || _rateLimited) ? null : _sendMessage,
+            child: IconButton(
+              icon: const Icon(Icons.send, color: Colors.white, size: 18),
+              onPressed: (_loading || _rateLimited) ? null : _sendMessage,
+            ),
           ),
         ],
       ),
@@ -328,26 +389,44 @@ import 'dart:convert';
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF6F7FA),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const NewsFeedScreen()),
+        );
+        return false;
+      },
+      child: Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Ask AI"),
-        backgroundColor: const Color(0xFFF05151),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const NewsFeedScreen()),
+            );
+          },
+        ),
+        title: Text(
+          'Ask Ai',
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         actions: [
-          GestureDetector(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen())),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: CircleAvatar(
-    radius: 18,
-    backgroundColor: Color(0xFFE0E0E0),
-    child: Icon(
-      Icons.person,
-      size: 18,
-      color: Color(0xFF757575),
-    ),
-  ),
-            ),
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.tune, color: Colors.black),
+            onPressed: () {},
           ),
         ],
       ),
@@ -458,6 +537,7 @@ import 'dart:convert';
      ],
    ),
   ),
+    ),
     );
   }
   }
