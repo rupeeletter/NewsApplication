@@ -308,203 +308,247 @@ Widget build(BuildContext context) {
   }
 
   return Scaffold(
-    backgroundColor: Colors.white,
+    backgroundColor: const Color(0xFFF5F5F5),
     appBar: AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
-      title: const Text(
-        "PROFILE",
-        style: TextStyle(color: Colors.black),
+      title: Text(
+        "Profile",
+        style: GoogleFonts.poppins(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
       ),
-      centerTitle: true,
+      centerTitle: false,
       leading: const BackButton(color: Colors.black),
     ),
-    body: SingleChildScrollView( // ✅ FIX OVERFLOW
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    body: SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(height: 30),
 
-            const SizedBox(height: 20),
-
-            /// 🔴 PROFILE IMAGE
-           Center(
+          /// PROFILE AVATAR
+          Center(
             child: CircleAvatar(
-              radius: 55,
-              backgroundColor: Colors.grey.shade300,
+              radius: 50,
+              backgroundColor: const Color(0xFFE8E8E8),
               child: Icon(
-                Icons.person,
+                Icons.person_outline,
                 size: 50,
                 color: Colors.grey.shade600,
               ),
             ),
           ),
 
-            const SizedBox(height: 30),
+          const SizedBox(height: 16),
 
-            /// ---------------- NAME ----------------
-            Text(
-              "Name",
-              style: GoogleFonts.poppins(
-                fontSize: 13,
-                color: Colors.grey,
-              ),
+          /// NAME
+          Text(
+            name.isEmpty ? "No name" : name,
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
             ),
-            const SizedBox(height: 4),
-            Text(
-              name.isEmpty ? "No name" : name,
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+          ),
+
+          const SizedBox(height: 4),
+
+          /// EMAIL
+          Text(
+            email.isEmpty ? "No email" : email,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              color: Colors.grey.shade600,
             ),
+          ),
 
-            const SizedBox(height: 20),
+          const SizedBox(height: 30),
 
-            /// ---------------- EMAIL ----------------
-            Text(
-              "Gmail",
-              style: GoogleFonts.poppins(
-                fontSize: 13,
-                color: Colors.grey,
-              ),
+          /// DATA & PRIVACY SECTION
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
             ),
-            const SizedBox(height: 4),
-            Text(
-              email.isEmpty ? "No email" : email,
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "DATA & PRIVACY",
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade600,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                buildMenuItem(
+                  icon: Icons.info_outline,
+                  text: "Disclaimer",
+                  onTap: () => _openUrl("https://news.rupeeletter.com/disclaimer"),
+                ),
+                const Divider(height: 1),
+                buildMenuItem(
+                  icon: Icons.shield_outlined,
+                  text: "Terms & Conditions",
+                  onTap: () => _openUrl("https://news.rupeeletter.com/terms-and-conditions"),
+                ),
+                const Divider(height: 1),
+                buildMenuItem(
+                  icon: Icons.lock_outline,
+                  text: "Privacy Policy",
+                  onTap: () => _openUrl("https://news.rupeeletter.com/privacy-policy"),
+                ),
+              ],
             ),
+          ),
 
-            const SizedBox(height: 30),
+          const SizedBox(height: 16),
 
-            /// ================= DATA & PRIVACY =================
-            Text(
-              "Data & Privacy",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+          /// SETTINGS SECTION
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
             ),
-            const SizedBox(height: 12),
-
-            buildLink(
-              "Disclaimer",
-              () => _openUrl("https://news.rupeeletter.com/disclaimer"),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "SETTINGS",
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade600,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE8E8F5),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.notifications_outlined,
+                        size: 20,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Notifications",
+                            style: GoogleFonts.poppins(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            "Push, Email, SMS",
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Switch(
+                      value: notificationsEnabled,
+                      onChanged: _toggleNotifications,
+                      activeColor: const Color(0xFF00C853),
+                    ),
+                  ],
+                ),
+              ],
             ),
+          ),
 
-            buildLink(
-              "Terms & Conditions",
-              () => _openUrl("https://news.rupeeletter.com/terms-and-conditions"),
-            ),
+          const SizedBox(height: 16),
 
-            buildLink(
-              "Privacy Policy",
-              () => _openUrl("https://news.rupeeletter.com/privacy-policy"),
-            ),
-
-            const SizedBox(height: 30),
-
-            /// ================= SUPPORT =================
-            Text(
-              "Support",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            buildLink(
-              "Contact Us",
-              () => _openUrl("https://news.rupeeletter.com/contact-us"),
-            ),
-
-
-            const SizedBox(height: 30),
-
-            /// ================= SETTINGS =================
-            Text(
-              "Settings",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            /// ---------------- NOTIFICATIONS TOGGLE ----------------
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(10),
+          /// LOGOUT BUTTON
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: logout,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF5252),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        notificationsEnabled
-                            ? Icons.notifications_active
-                            : Icons.notifications_off_outlined,
-                        size: 22,
-                        color: notificationsEnabled
-                            ? Colors.black
-                            : Colors.grey,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        "App Notifications",
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Switch(
-                    value: notificationsEnabled,
-                    onChanged: _toggleNotifications,
-                    activeColor: Colors.green,
+                  const Icon(Icons.logout, color: Colors.white, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Logout",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
             ),
+          ),
 
-            const SizedBox(height: 30),
+          const SizedBox(height: 12),
 
-            /// ---------------- LOGOUT ----------------
-            TextButton(
-              onPressed: logout,
-              style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              child: Text(
-                "Log Out",
-                style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  color: Colors.black,
+          /// DELETE ACCOUNT BUTTON
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: showDeleteDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF5252),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                elevation: 0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.delete_outline, color: Colors.white, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Delet Account",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
+          ),
 
-            TextButton(
-                onPressed: showDeleteDialog,
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                child: Text(
-                  "Delete Account",
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            const SizedBox(height: 30),
-          ],
-        ),
+          const SizedBox(height: 30),
+        ],
       ),
     ),
   );
@@ -537,22 +581,59 @@ Widget build(BuildContext context) {
     );
   }
 
-  Widget buildLink(String text, VoidCallback onTap) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 10),
-    child: InkWell(
+  Widget buildMenuItem({
+    required IconData icon,
+    required String text,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
       onTap: onTap,
-      child: Text(
-        text,
-        style: GoogleFonts.poppins(
-          fontSize: 15,
-          color: Colors.black,
-          decoration: TextDecoration.underline,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8E8F5),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 20, color: Colors.grey.shade700),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                text,
+                style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey.shade400),
+          ],
         ),
       ),
-    ),
-  );
-}
+    );
+  }
+
+  Widget buildLink(String text, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: InkWell(
+        onTap: onTap,
+        child: Text(
+          text,
+          style: GoogleFonts.poppins(
+            fontSize: 15,
+            color: Colors.black,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    );
+  }
 
 
 }
