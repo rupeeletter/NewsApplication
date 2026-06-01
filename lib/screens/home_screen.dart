@@ -933,53 +933,82 @@ else if (a.commodities_market.isNotEmpty) ...[
 
   // ------------------------- UI -------------------------
   Widget _buildTopSearchRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    return Container(
+      height: 64,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Colors.white,
       child: Row(
         children: [
+          // Hamburger Menu Icon
+          IconButton(
+            icon: const Icon(Icons.menu, color: Color(0xFF333333), size: 24),
+            onPressed: () {
+              // TODO: Open drawer/menu
+            },
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+          
+          const SizedBox(width: 12),
+          
+          // Search Bar
           Expanded(
             child: Container(
               height: 48,
               decoration: BoxDecoration(
-                color: const Color(0xFFF6B3B3),
-                borderRadius: BorderRadius.circular(28),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: const Color(0xFFE5E5E5), width: 1),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
+                  const Icon(Icons.search, color: Color(0xFFB7B7B7), size: 20),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
                       controller: _searchController,
-                      decoration: const InputDecoration(
+                      style: GoogleFonts.manrope(
+                        fontSize: 12,
+                        color: const Color(0xFF333333),
+                      ),
+                      decoration: InputDecoration(
                         hintText: "Search here...",
+                        hintStyle: GoogleFonts.manrope(
+                          fontSize: 12,
+                          color: const Color(0xFFB7B7B7),
+                        ),
                         border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
                       ),
                     ),
                   ),
-                  const Icon(Icons.search),
                 ],
               ),
             ),
           ),
+          
           const SizedBox(width: 12),
-         GestureDetector(
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const ProfileScreen()),
-    );
-  },
-  child: CircleAvatar(
-  radius: 18,
-  backgroundColor: Color(0xFFE0E0E0),
-  child: Icon(
-    Icons.person,
-    size: 18,
-    color: Color(0xFF757575),
-  ),
-),
-),
-
+          
+          // Profile Avatar
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+            },
+            child: const CircleAvatar(
+              radius: 20,
+              backgroundColor: Color(0xFFE0E0E0),
+              child: Icon(
+                Icons.person,
+                size: 20,
+                color: Color(0xFF757575),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -993,7 +1022,7 @@ Widget _buildTabsRow() {
     child: Column(
       children: [
         SizedBox(
-          height: 44,
+          height: 47,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1004,40 +1033,42 @@ Widget _buildTabsRow() {
               return GestureDetector(
                 onTap: () => _onTabChange(idx),
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 22),
+                  padding: const EdgeInsets.only(right: 18),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        tabs[idx],
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          fontWeight:
-                              selected ? FontWeight.w600 : FontWeight.w400,
-                          color: selected
-                              ? const Color(0xFFEA6B6B)
-                              : Colors.black54,
-                        ),
-                      ),
+                     Text(
+  tabs[idx],
+  style: GoogleFonts.manrope(
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.65,
+    height: 19.5 / 12,
+    color: selected
+        ?const Color(0xFFE54350)
+        : const Color(0xFF9AA0AE),
+  ),
+),
 
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
 
                       /// ✅ underline EXACTLY same width as text
                       Container(
-                        height: 2,
+                        height: 1.5,
                         decoration: BoxDecoration(
                           color: selected
-                              ? const Color(0xFFEA6B6B)
+                              ? const Color(0xFFE54350)
                               : Colors.transparent,
                         ),
-                        width: _textWidth(
-                          tabs[idx],
-                          GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                       width: _textWidth(
+  tabs[idx],
+  GoogleFonts.manrope(
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.65,
+  ),
+) - 4,
                       ),
                     ],
                   ),
@@ -1047,7 +1078,7 @@ Widget _buildTabsRow() {
           ),
         ),
 
-        const Divider(height: 1, thickness: 0.8),
+        const Divider(height: 1, thickness: 0.6,color: Color(0xFFE9E9E9)),
       ],
     ),
   );
@@ -1425,22 +1456,86 @@ Widget _buildArticleCard(Article a) {
     }
   }
 
+  Color sentimentBgColor(String s) {
+    switch (s.toLowerCase()) {
+      case "very bullish":
+        return const Color(0xFFE8F5E9);
+      case "bullish":
+        return const Color(0xFFE8F5E9);
+      case "neutral":
+        return const Color(0xFFF5F5F5);
+      case "bearish":
+        return const Color(0xFFFFEBEE);
+      case "very bearish":
+        return const Color(0xFFFFEBEE);
+      default:
+        return const Color(0xFFF5F5F5);
+    }
+  }
+
+  Color sentimentBorderColor(String s) {
+    switch (s.toLowerCase()) {
+      case "very bullish":
+        return const Color(0xFF66BB6A);
+      case "bullish":
+        return const Color(0xFF81C784);
+      case "neutral":
+        return const Color(0xFFBDBDBD);
+      case "bearish":
+        return const Color(0xFFEF5350);
+      case "very bearish":
+        return const Color(0xFFE53935);
+      default:
+        return const Color(0xFFBDBDBD);
+    }
+  }
+
+  Color impactBgColor(String i) {
+    switch (i.toLowerCase()) {
+      case "very high":
+        return const Color(0xFFFFF3E0);
+      case "high":
+        return const Color(0xFFFFF3E0);
+      case "mild":
+        return const Color(0xFFFFFBF0);
+      case "negligible":
+        return const Color(0xFFFFFBF0);
+      default:
+        return const Color(0xFFF5F5F5);
+    }
+  }
+
+  Color impactBorderColor(String i) {
+    switch (i.toLowerCase()) {
+      case "very high":
+        return const Color(0xFFFF9800);
+      case "high":
+        return const Color(0xFFFFB74D);
+      case "mild":
+        return const Color(0xFFFFD54F);
+      case "negligible":
+        return const Color(0xFFFFE082);
+      default:
+        return const Color(0xFFBDBDBD);
+    }
+  }
+
   return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.75, // 🔥 KEY LINE
+    height: MediaQuery.of(context).size.height * 0.75,
     child: InkWell(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(12),
       onTap: () => _showFullStory(a),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -1452,13 +1547,14 @@ Widget _buildArticleCard(Article a) {
             /// TITLE
             Text(
               a.title,
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+              style: GoogleFonts.dmSans(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                color: const Color(0xFF333333),
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             /// SUMMARY (Scrollable if long)
             Expanded(
@@ -1466,93 +1562,144 @@ Widget _buildArticleCard(Article a) {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   a.summary,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    height: 1.5,
+                  textAlign: TextAlign.justify,
+                  style: GoogleFonts.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 22.75 / 14,
+                    color: const Color(0xFF555555),
                   ),
                 ),
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
 
             /// MARKET TAG
             if (a.companies.isNotEmpty)
               Text(
                 "Companies: ${a.companies.join(', ')}",
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.manrope(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
+                  color: const Color(0xFF333333),
                 ),
               )
             else if (a.sector_market.isNotEmpty)
-  Text(
-    "Sector: ${a.sector_market}",
-                style: GoogleFonts.poppins(
+              Text(
+                "Sector: ${a.sector_market}",
+                style: GoogleFonts.manrope(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
+                  color: const Color(0xFF333333),
                 ),
               )
             else if (a.commodities_market.isNotEmpty)
               Text(
                 "Commodity: ${a.commodities_market.join(', ')}",
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.manrope(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
+                  color: const Color(0xFF333333),
                 ),
               ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
 
-            /// SENTIMENT
+            /// SENTIMENT CHIP
             if (a.sentiment.isNotEmpty)
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Sentiment: ",
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
+              Row(
+                children: [
+                  SizedBox(
+                    width: 100,
+                    child: Text(
+                      "Sentiment:",
+                      style: GoogleFonts.manrope(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF333333),
                       ),
                     ),
-                    TextSpan(
-                      text: a.sentiment,
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: sentimentColor(a.sentiment),
-                      ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: _getSentimentBg(a.sentiment),
+                      border: Border.all(color: _getSentimentBorder(a.sentiment), width: 1),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ],
-                ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _getSentimentIcon(a.sentiment),
+                          size: 14,
+                          color: _getDarkerSentiment(a.sentiment),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          a.sentiment,
+                          style: GoogleFonts.manrope(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: _getDarkerSentiment(a.sentiment),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
 
-            /// IMPACT
+            if (a.sentiment.isNotEmpty && a.impact.isNotEmpty)
+              const SizedBox(height: 8),
+
+            /// IMPACT CHIP
             if (a.impact.isNotEmpty)
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Impact: ",
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
+              Row(
+                children: [
+                  SizedBox(
+                    width: 100,
+                    child: Text(
+                      "Impact:",
+                      style: GoogleFonts.manrope(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF333333),
                       ),
                     ),
-                    TextSpan(
-                      text: a.impact,
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: impactColor(a.impact),
-                      ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: _getImpactBg(a.impact),
+                      border: Border.all(color: _getImpactBorder(a.impact), width: 1),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ],
-                ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.flash_on,
+                          size: 14,
+                          color: _getDarkerImpact(a.impact),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          a.impact,
+                          style: GoogleFonts.manrope(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: _getDarkerImpact(a.impact),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
 
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
 
             /// FOOTER
             Row(
@@ -1562,9 +1709,10 @@ Widget _buildArticleCard(Article a) {
                 /// DATE
                 Text(
                   dateFormatted,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.manrope(
                     fontSize: 11,
-                    color: Colors.grey,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF8A8A8A),
                   ),
                 ),
 
@@ -1581,8 +1729,8 @@ Widget _buildArticleCard(Article a) {
                         constraints: const BoxConstraints(),
                         icon: Image.asset(
                           "assets/tradingview.png",
-                          height: 32,
-                          width: 32,
+                          height: 28,
+                          width: 28,
                         ),
                         onPressed: () async {
                           try {
@@ -1605,7 +1753,7 @@ Widget _buildArticleCard(Article a) {
 
                             if (a.sector_market.isNotEmpty) {
                               final sector =
-    await _fetchSectorDetails(a.sector_market);
+                                  await _fetchSectorDetails(a.sector_market);
 
                               if (sector != null) {
                                 _openTradingView(
@@ -1643,6 +1791,8 @@ Widget _buildArticleCard(Article a) {
                         },
                       ),
 
+                    const SizedBox(width: 6),
+
                     /// SAVE
                     IconButton(
                       padding: EdgeInsets.zero,
@@ -1651,10 +1801,10 @@ Widget _buildArticleCard(Article a) {
                         _locallySavedIds.contains(a.id)
                             ? Icons.bookmark
                             : Icons.bookmark_border,
-                        size: 32,
+                        size: 28,
                         color: _locallySavedIds.contains(a.id)
-                            ? Colors.red
-                            : Colors.grey,
+                            ? const Color(0xFFE54350)
+                            : const Color(0xFF8A8A8A),
                       ),
                       onPressed: () => _toggleSaveNews(a),
                     ),
@@ -1680,11 +1830,122 @@ BottomNavigationBarItem _navItem({
   return BottomNavigationBarItem(
     icon: SvgPicture.asset(
       selected ? active : inactive,
-      height: 22,
+      height: 20,
     ),
     label: label,
     tooltip: label,
   );
+}
+
+Color _getSentimentBg(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFFE8F5E9);
+    case "bullish":
+      return const Color(0xFFE8F5E9);
+    case "neutral":
+      return const Color(0xFFF5F5F5);
+    case "bearish":
+      return const Color(0xFFFFEBEE);
+    case "very bearish":
+      return const Color(0xFFFFEBEE);
+    default:
+      return const Color(0xFFF5F5F5);
+  }
+}
+
+Color _getSentimentBorder(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFF66BB6A);
+    case "bullish":
+      return const Color(0xFF81C784);
+    case "neutral":
+      return const Color(0xFFBDBDBD);
+    case "bearish":
+      return const Color(0xFFEF5350);
+    case "very bearish":
+      return const Color(0xFFE53935);
+    default:
+      return const Color(0xFFBDBDBD);
+  }
+}
+
+Color _getDarkerSentiment(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFF2E7D32);
+    case "bullish":
+      return const Color(0xFF388E3C);
+    case "neutral":
+      return const Color(0xFF616161);
+    case "bearish":
+      return const Color(0xFFC62828);
+    case "very bearish":
+      return const Color(0xFFB71C1C);
+    default:
+      return Colors.grey;
+  }
+}
+
+Color _getImpactBg(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFFFF3E0);
+    case "high":
+      return const Color(0xFFFFF3E0);
+    case "mild":
+      return const Color(0xFFFFFBF0);
+    case "negligible":
+      return const Color(0xFFFFFBF0);
+    default:
+      return const Color(0xFFF5F5F5);
+  }
+}
+
+Color _getImpactBorder(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFFF9800);
+    case "high":
+      return const Color(0xFFFFB74D);
+    case "mild":
+      return const Color(0xFFFFD54F);
+    case "negligible":
+      return const Color(0xFFFFE082);
+    default:
+      return const Color(0xFFBDBDBD);
+  }
+}
+
+Color _getDarkerImpact(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFE65100);
+    case "high":
+      return const Color(0xFFF57C00);
+    case "mild":
+      return const Color(0xFFFFA000);
+    case "negligible":
+      return const Color(0xFFFFB300);
+    default:
+      return Colors.grey;
+  }
+}
+
+IconData _getSentimentIcon(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+    case "bullish":
+      return Icons.trending_up;
+    case "neutral":
+      return Icons.trending_flat;
+    case "bearish":
+    case "very bearish":
+      return Icons.trending_down;
+    default:
+      return Icons.circle;
+  }
 }
 
 
@@ -1710,26 +1971,29 @@ BottomNavigationBarItem _navItem({
       decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(
-          top: BorderSide(color: Color(0xFFE0E0E0), width: 0.8),
-        ),
+  top: BorderSide(
+    color: Color(0xFFEAEAEA),
+    width: 0.6,
+  ),
+),
       ),
       child: BottomNavigationBar(
         currentIndex: _bottomIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         elevation: 0,
-        selectedItemColor: const Color(0xFFEA6B6B),
-        unselectedItemColor: Colors.black54,
+        selectedItemColor:const Color(0xFFE54350),
+        unselectedItemColor: const Color(0xFF6B7A99),
         showUnselectedLabels: true,
         selectedLabelStyle: GoogleFonts.poppins(
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: FontWeight.w600,
-          height: 1.2,
+          height: 1.0,
         ),
         unselectedLabelStyle: GoogleFonts.poppins(
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
-          height: 1.2,
+          height: 1.0,
         ),
         onTap: (index) {
   if (index == _bottomIndex) return;
@@ -1836,7 +2100,7 @@ class CompanySearchCard extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.04),
