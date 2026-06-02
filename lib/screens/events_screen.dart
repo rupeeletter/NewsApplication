@@ -926,7 +926,7 @@ Widget _buildIpoTab() {
                               children: [
                                 Text(
                                   tab.toUpperCase(),
-                                  style: GoogleFonts.manrope(
+                                  style: GoogleFonts.dmSans(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0.5,
@@ -1118,120 +1118,134 @@ Widget _buildIpoArticleCard(Article a) {
             ),
             const SizedBox(height: 8),
             if (a.companies.isNotEmpty)
-              Text(
-                "Companies: ${a.companies.join(', ')}",
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF333333),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Companies: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.companies.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               )
             else if (a.sector_market.isNotEmpty)
-              Text(
-                "Sector: ${a.sector_market}",
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF333333),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Sector: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.sector_market,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               )
             else if (a.commodities_market.isNotEmpty)
-              Text(
-                "Commodity: ${a.commodities_market.join(', ')}",
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF333333),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Commodity: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.commodities_market.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             const SizedBox(height: 6),
             if (a.sentiment.isNotEmpty)
-              Row(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      "Sentiment:",
-                      style: GoogleFonts.manrope(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Sentiment: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
                         color: const Color(0xFF333333),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: _getSentimentBg(a.sentiment),
-                      border: Border.all(color: _getSentimentBorder(a.sentiment), width: 1),
-                      borderRadius: BorderRadius.circular(20),
+                    TextSpan(
+                      text: a.sentiment,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: _getSentimentColor(a.sentiment),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _getSentimentIcon(a.sentiment),
-                          size: 14,
-                          color: _getDarkerSentiment(a.sentiment),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          a.sentiment,
-                          style: GoogleFonts.manrope(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: _getDarkerSentiment(a.sentiment),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             if (a.sentiment.isNotEmpty && a.impact.isNotEmpty)
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
             if (a.impact.isNotEmpty)
-              Row(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      "Impact:",
-                      style: GoogleFonts.manrope(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Impact: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
                         color: const Color(0xFF333333),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: _getImpactBg(a.impact),
-                      border: Border.all(color: _getImpactBorder(a.impact), width: 1),
-                      borderRadius: BorderRadius.circular(20),
+                    TextSpan(
+                      text: a.impact,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: _getImpactColor(a.impact),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.flash_on,
-                          size: 14,
-                          color: _getDarkerImpact(a.impact),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          a.impact,
-                          style: GoogleFonts.manrope(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: _getDarkerImpact(a.impact),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             const SizedBox(height: 10),
             Row(
@@ -1323,6 +1337,38 @@ Widget _buildIpoArticleCard(Article a) {
       ),
     ),
   );
+}
+
+Color _getSentimentColor(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFF0F9D58);
+    case "bullish":
+      return const Color(0xFF5AD079);
+    case "neutral":
+      return const Color(0xFFA6A49A);
+    case "bearish":
+      return const Color(0xFFEB6969);
+    case "very bearish":
+      return const Color(0xFFD93025);
+    default:
+      return const Color(0xFF555555);
+  }
+}
+
+Color _getImpactColor(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFFFB000);
+    case "high":
+      return const Color(0xFFFF9B5B);
+    case "mild":
+      return const Color(0xFFFFCD79);
+    case "negligible":
+      return const Color(0xFFFFCEAF);
+    default:
+      return const Color(0xFF555555);
+  }
 }
 
 Color _getSentimentBg(String s) {
@@ -1452,7 +1498,7 @@ IconData _getSentimentIcon(String s) {
             const SizedBox(height: 16),
             Text(
               "No events for today",
-              style: GoogleFonts.manrope(
+              style: GoogleFonts.dmSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: const Color(0xFF64748B),
@@ -1478,17 +1524,17 @@ IconData _getSentimentIcon(String s) {
               children: [
                 Text(
                   "Today's Events",
-                  style: GoogleFonts.manrope(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1E293B),
+                  style: GoogleFonts.dmSans(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF333333),
                   ),
                 ),
                 Text(
                   todayFormatted,
-                  style: GoogleFonts.manrope(
+                  style: GoogleFonts.dmSans(
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     color: const Color(0xFFE54350),
                   ),
                 ),
@@ -1496,15 +1542,8 @@ IconData _getSentimentIcon(String s) {
             ),
             const SizedBox(height: 20),
 
-            // Premium Event Card (First Event)
-            if (_todayEvents.isNotEmpty)
-              _buildPremiumEventCard(_todayEvents.first),
-
-            const SizedBox(height: 16),
-
-            // Other Events
-            if (_todayEvents.length > 1)
-              ..._todayEvents.skip(1).map((event) => _buildCompactEventCard(event)),
+            // Event Cards
+            ..._todayEvents.map((event) => _buildUnifiedEventCard(event)),
           ],
         ),
       ),
@@ -1527,7 +1566,7 @@ IconData _getSentimentIcon(String s) {
             const SizedBox(height: 16),
             Text(
               "No upcoming events",
-              style: GoogleFonts.manrope(
+              style: GoogleFonts.dmSans(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: const Color(0xFF64748B),
@@ -1546,399 +1585,23 @@ IconData _getSentimentIcon(String s) {
           children: [
             Text(
               "Upcoming Events",
-              style: GoogleFonts.manrope(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF1E293B),
+              style: GoogleFonts.dmSans(
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                color: const Color(0xFF333333),
               ),
             ),
             const SizedBox(height: 20),
 
-            ..._upcomingEvents.map((event) => _buildModernEventCard(event)),
+            ..._upcomingEvents.map((event) => _buildUnifiedEventCard(event)),
           ],
         ),
       ),
     );
   }
 
-  // Premium Event Card for Today's Featured Event
-  Widget _buildPremiumEventCard(CorporateEvent event) {
-    final timeFormatted = DateFormat('hh:mm a').format(event.date);
-    final dateFormatted = DateFormat('dd MMM yyyy').format(event.date);
-    final isExpanded = _expandedEventId == event.id;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (_expandedEventId == event.id) {
-            _expandedEventId = null; // Collapse if already expanded
-          } else {
-            _expandedEventId = event.id; // Expand this card
-          }
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Badge and Bookmark Row
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF10B981),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    event.type.toUpperCase(),
-                    style: GoogleFonts.manrope(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () => _toggleSaveEvent(event),
-                  child: Icon(
-                    _locallySavedEventIds.contains(event.id)
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
-                    color: _locallySavedEventIds.contains(event.id)
-                        ? const Color(0xFFE54350)
-                        : const Color(0xFF94A3B8),
-                    size: 24,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Title
-            Text(
-              event.title,
-              style: GoogleFonts.manrope(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: const Color(0xFF1E293B),
-                height: 1.3,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Description
-            Text(
-              event.description,
-              style: GoogleFonts.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFF64748B),
-                height: 1.5,
-              ),
-              maxLines: isExpanded ? null : 3,
-              overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-            ),
-
-            // Expandable Footer Section
-            AnimatedCrossFade(
-              firstChild: const SizedBox.shrink(),
-              secondChild: Column(
-                children: [
-                  const SizedBox(height: 16),
-
-                  // Divider
-                  Container(
-                    height: 1,
-                    color: const Color(0xFFE2E8F0),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Footer with Time and Button
-                  Row(
-                    children: [
-                      // Time Icon and Text
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFFE54350), width: 1.5),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.access_time,
-                              size: 16,
-                              color: Color(0xFFE54350),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              timeFormatted,
-                              style: GoogleFonts.manrope(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFFE54350),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-
-                      // Date Icon and Text
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFFE54350), width: 1.5),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.calendar_today,
-                              size: 14,
-                              color: Color(0xFFE54350),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              dateFormatted,
-                              style: GoogleFonts.manrope(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFFE54350),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-
-                      // Remind Me Button
-                      ElevatedButton(
-                        onPressed: () => _toggleSaveEvent(event),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE54350),
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          "Remind Me",
-                          style: GoogleFonts.manrope(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              crossFadeState: isExpanded
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-              duration: const Duration(milliseconds: 300),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Compact Event Card for Additional Today's Events
-  Widget _buildCompactEventCard(CorporateEvent event) {
-    final timeFormatted = DateFormat('hh:mm a').format(event.date);
-    final dateFormatted = DateFormat('dd MMM yyyy').format(event.date);
-    final isExpanded = _expandedEventId == event.id;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (_expandedEventId == event.id) {
-            _expandedEventId = null;
-          } else {
-            _expandedEventId = event.id;
-          }
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // Red Accent Strip
-                Container(
-                  width: 4,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE54350),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const SizedBox(width: 16),
-
-                // Content
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.title,
-                        style: GoogleFonts.manrope(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF1E293B),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        event.description,
-                        style: GoogleFonts.manrope(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF64748B),
-                        ),
-                        maxLines: isExpanded ? null : 2,
-                        overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        timeFormatted,
-                        style: GoogleFonts.manrope(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF10B981),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Chevron
-                Icon(
-                  isExpanded ? Icons.keyboard_arrow_up : Icons.chevron_right,
-                  color: const Color(0xFF94A3B8),
-                  size: 24,
-                ),
-              ],
-            ),
-
-            // Expandable Footer Section
-            AnimatedCrossFade(
-              firstChild: const SizedBox.shrink(),
-              secondChild: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  Container(
-                    height: 1,
-                    color: const Color(0xFFE2E8F0),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFFE54350), width: 1.5),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.calendar_today,
-                              size: 14,
-                              color: Color(0xFFE54350),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              dateFormatted,
-                              style: GoogleFonts.manrope(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFFE54350),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: () => _toggleSaveEvent(event),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE54350),
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          "Remind Me",
-                          style: GoogleFonts.manrope(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              crossFadeState: isExpanded
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-              duration: const Duration(milliseconds: 300),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Modern Event Card for Upcoming Events (Like LIC/Tata Motors)
-  Widget _buildModernEventCard(CorporateEvent event) {
+  // Unified Event Card Design for Both Today and Upcoming
+  Widget _buildUnifiedEventCard(CorporateEvent event) {
     final dateFormatted = DateFormat('dd MMM yyyy').format(event.date);
     final timeFormatted = DateFormat('hh:mm a').format(event.date);
     final isExpanded = _expandedEventId == event.id;
@@ -1956,160 +1619,194 @@ IconData _getSentimentIcon(String s) {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 10,
               offset: const Offset(0, 2),
             ),
           ],
         ),
         child: IntrinsicHeight(
-          child: Column(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  // Red Accent Strip
-                  Container(
-                    width: 4,
-                    height: isExpanded ? null : 80,
-                    constraints: isExpanded ? const BoxConstraints(minHeight: 80) : null,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE54350),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        bottomLeft: Radius.circular(16),
-                      ),
-                    ),
+              // Left Red Accent Strip
+              Container(
+                width: 4,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE54350),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
                   ),
-
-                  // Content
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            event.title,
-                            style: GoogleFonts.manrope(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF1E293B),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            event.description,
-                            style: GoogleFonts.manrope(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF64748B),
-                            ),
-                            maxLines: isExpanded ? null : 2,
-                            overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            dateFormatted,
-                            style: GoogleFonts.manrope(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF10B981),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  // Chevron
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: Icon(
-                      isExpanded ? Icons.keyboard_arrow_up : Icons.chevron_right,
-                      color: const Color(0xFF94A3B8),
-                      size: 24,
-                    ),
-                  ),
-                ],
+                ),
               ),
 
-              // Expandable Footer Section
-              AnimatedCrossFade(
-                firstChild: const SizedBox.shrink(),
-                secondChild: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 16, 16),
+              // Content
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 1,
-                        color: const Color(0xFFE2E8F0),
-                      ),
-                      const SizedBox(height: 16),
+                      // Title and Bookmark Row
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: const Color(0xFFE54350), width: 1.5),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.access_time,
-                                  size: 16,
-                                  color: Color(0xFFE54350),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  timeFormatted,
-                                  style: GoogleFonts.manrope(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFFE54350),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Spacer(),
-                          ElevatedButton(
-                            onPressed: () => _toggleSaveEvent(event),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFE54350),
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
+                          Expanded(
                             child: Text(
-                              "Remind Me",
-                              style: GoogleFonts.manrope(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
+                              event.title,
+                              style: GoogleFonts.dmSans(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                height: 32 / 20,
+                                color: const Color(0xFF333333),
                               ),
                             ),
                           ),
+                          if (isExpanded) ...[
+                            const SizedBox(width: 8),
+                            GestureDetector(
+                              onTap: () => _toggleSaveEvent(event),
+                              child: Icon(
+                                _locallySavedEventIds.contains(event.id)
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                color: _locallySavedEventIds.contains(event.id)
+                                    ? const Color(0xFFE54350)
+                                    : const Color(0xFF94A3B8),
+                                size: 24,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
+                      const SizedBox(height: 8),
+
+                      // Description
+                      Text(
+                        event.description,
+                        style: GoogleFonts.dmSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          height: 24 / 14,
+                          color: const Color(0xFF555555),
+                        ),
+                        textAlign: TextAlign.justify,
+                        maxLines: isExpanded ? null : 2,
+                        overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Date in Collapsed State
+                      if (!isExpanded)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                dateFormatted,
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFFE54350),
+                                ),
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Color(0xFF94A3B8),
+                              size: 24,
+                            ),
+                          ],
+                        ),
+
+                      // Expanded Footer Section
+                      if (isExpanded) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          height: 1,
+                          color: const Color(0xFFE2E8F0),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Time Row
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.access_time_outlined,
+                              size: 16,
+                              color: Color(0xFFE54350),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              timeFormatted,
+                              style: GoogleFonts.dmSans(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xFF64748B),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Date Row
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.calendar_today_outlined,
+                              size: 16,
+                              color: Color(0xFFE54350),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              dateFormatted,
+                              style: GoogleFonts.dmSans(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xFF64748B),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Remind Me Button
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: SizedBox(
+                            width: 122,
+                            height: 44,
+                            child: ElevatedButton(
+                              onPressed: () => _toggleSaveEvent(event),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFE54350),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.zero,
+                              ),
+                              child: Text(
+                                "Remind Me",
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
-                crossFadeState: isExpanded
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                duration: const Duration(milliseconds: 300),
               ),
             ],
           ),

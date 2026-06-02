@@ -324,7 +324,7 @@ class _CompanyListItemState extends State<CompanyListItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -337,60 +337,114 @@ class _CompanyListItemState extends State<CompanyListItem> {
             ),
           );
         },
+        borderRadius: BorderRadius.circular(16),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade200, width: 1),
-            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Row(
             children: [
+              // Left side - Company info
               Expanded(
-                child: Text(
-                  widget.companyName,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.companyName,
+                      style: GoogleFonts.manrope(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        height: 25.6 / 16,
+                        letterSpacing: 0,
+                        color: const Color(0xFF191C1E),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.symbol.toUpperCase(),
+                      style: GoogleFonts.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 21 / 14,
+                        letterSpacing: -0.7,
+                        color: const Color(0xFF5A5D72),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              const SizedBox(width: 16),
+              // Right side - Price info
               if (loading)
                 const SizedBox(
-                  width: 16,
-                  height: 16,
+                  width: 20,
+                  height: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              else if (stockData != null) ...[
-                const SizedBox(
-                  height: 30,
-                  child: VerticalDivider(color: Colors.grey, thickness: 1),
+              else if (stockData != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      stockData!['price'],
+                      style: GoogleFonts.manrope(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        height: 25.6 / 16,
+                        color: const Color(0xFF191C1E),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: _getPercentageBackgroundColor(stockData!['changePercent']),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '${double.parse(stockData!['changePercent']) >= 0 ? '+' : ''}${stockData!['changePercent']}%',
+                        style: GoogleFonts.manrope(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: _getPercentageTextColor(stockData!['changePercent']),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  stockData!['price'],
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  stockData!['changePercent'],
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: double.parse(stockData!['changePercent']) >= 0
-                        ? Colors.green
-                        : Colors.red,
-                  ),
-                ),
-              ],
             ],
           ),
         ),
       ),
     );
+  }
+
+  Color _getPercentageBackgroundColor(String changePercent) {
+    final value = double.parse(changePercent);
+    if (value >= 0) {
+      return const Color(0xFFE8F5E9); // Light green
+    } else {
+      return const Color(0xFFFFEBEE); // Light red/pink
+    }
+  }
+
+  Color _getPercentageTextColor(String changePercent) {
+    final value = double.parse(changePercent);
+    if (value >= 0) {
+      return const Color(0xFF2E7D32); // Dark green
+    } else {
+      return const Color(0xFFC62828); // Dark red
+    }
   }
 }

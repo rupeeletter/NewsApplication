@@ -1346,63 +1346,139 @@ offset: const Offset(0, 3),
             const SizedBox(height: 12),
 
             if (a.companies.isNotEmpty)
-              Text(
-                "Companies: ${a.companies.join(', ')}",
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Companies: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.companies.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (a.sector_market.isNotEmpty)
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Sector: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.sector_market,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (a.commodities_market.isNotEmpty)
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Commodity: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.commodities_market.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
             const SizedBox(height: 6),
 
             if (a.sentiment.isNotEmpty)
-  Text.rich(
-    TextSpan(
-      children: [
-        TextSpan(
-          text: "Sentiment: ",
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        TextSpan(
-          text: a.sentiment,
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: sentimentColor(a.sentiment),
-          ),
-        ),
-      ],
-    ),
-  ),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Sentiment: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
+                        color: const Color(0xFF333333),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.sentiment,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: sentimentColor(a.sentiment),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
+            if (a.sentiment.isNotEmpty && a.impact.isNotEmpty)
+              const SizedBox(height: 6),
 
-            if (a.sentiment.isNotEmpty)
-  if (a.impact.isNotEmpty)
-  Text.rich(
-    TextSpan(
-      children: [
-        TextSpan(
-          text: "Impact: ",
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        TextSpan(
-          text: a.impact,
-          style: GoogleFonts.poppins(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            color: impactColor(a.impact),
-          ),
-        ),
-      ],
-    ),
-  ),
+            if (a.impact.isNotEmpty)
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Impact: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
+                        color: const Color(0xFF333333),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.impact,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: impactColor(a.impact),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
 
             const SizedBox(height: 8),
@@ -1577,30 +1653,78 @@ Widget _buildArticleCard(Article a) {
 
             /// MARKET TAG
             if (a.companies.isNotEmpty)
-              Text(
-                "Companies: ${a.companies.join(', ')}",
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF333333),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Companies: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.companies.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               )
             else if (a.sector_market.isNotEmpty)
-              Text(
-                "Sector: ${a.sector_market}",
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF333333),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Sector: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.sector_market,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               )
             else if (a.commodities_market.isNotEmpty)
-              Text(
-                "Commodity: ${a.commodities_market.join(', ')}",
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF333333),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Commodity: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.commodities_market.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -1608,95 +1732,61 @@ Widget _buildArticleCard(Article a) {
 
             /// SENTIMENT CHIP
             if (a.sentiment.isNotEmpty)
-              Row(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      "Sentiment:",
-                      style: GoogleFonts.manrope(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Sentiment: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
                         color: const Color(0xFF333333),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: _getSentimentBg(a.sentiment),
-                      border: Border.all(color: _getSentimentBorder(a.sentiment), width: 1),
-                      borderRadius: BorderRadius.circular(20),
+                    TextSpan(
+                      text: a.sentiment,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: _getSentimentColor(a.sentiment),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _getSentimentIcon(a.sentiment),
-                          size: 14,
-                          color: _getDarkerSentiment(a.sentiment),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          a.sentiment,
-                          style: GoogleFonts.manrope(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: _getDarkerSentiment(a.sentiment),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
             if (a.sentiment.isNotEmpty && a.impact.isNotEmpty)
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
 
             /// IMPACT CHIP
             if (a.impact.isNotEmpty)
-              Row(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      "Impact:",
-                      style: GoogleFonts.manrope(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Impact: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
                         color: const Color(0xFF333333),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: _getImpactBg(a.impact),
-                      border: Border.all(color: _getImpactBorder(a.impact), width: 1),
-                      borderRadius: BorderRadius.circular(20),
+                    TextSpan(
+                      text: a.impact,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: _getImpactColor(a.impact),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.flash_on,
-                          size: 14,
-                          color: _getDarkerImpact(a.impact),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          a.impact,
-                          style: GoogleFonts.manrope(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: _getDarkerImpact(a.impact),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
             const SizedBox(height: 10),
@@ -1835,6 +1925,38 @@ BottomNavigationBarItem _navItem({
     label: label,
     tooltip: label,
   );
+}
+
+Color _getSentimentColor(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFF0F9D58);
+    case "bullish":
+      return const Color(0xFF5AD079);
+    case "neutral":
+      return const Color(0xFFA6A49A);
+    case "bearish":
+      return const Color(0xFFEB6969);
+    case "very bearish":
+      return const Color(0xFFD93025);
+    default:
+      return const Color(0xFF555555);
+  }
+}
+
+Color _getImpactColor(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFFFB000);
+    case "high":
+      return const Color(0xFFFF9B5B);
+    case "mild":
+      return const Color(0xFFFFCD79);
+    case "negligible":
+      return const Color(0xFFFFCEAF);
+    default:
+      return const Color(0xFF555555);
+  }
 }
 
 Color _getSentimentBg(String s) {

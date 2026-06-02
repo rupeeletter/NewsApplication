@@ -41,6 +41,7 @@ class _SavedNewsFeedScreenState extends State<SavedNewsFeedScreen> {
   int _tabIndex = 0;
   late String currentUserId;
   Set<String> _viewedArticles = {};
+  String? _expandedItemId; // Track expanded card (for both news and events)
   // InterstitialAd? _interstitialAd;
   // bool _isShowingAd = false;
 
@@ -200,8 +201,7 @@ Future<void> _loadUserId() async {
     fileName: "",
     excerpt: e["summary"] ?? "",
 
-    // ✅ FIXED
-    tags: [],   // MUST be List<String>
+    tags: [],
 
     url: "",
 
@@ -699,51 +699,167 @@ Widget _buildRemoveAllButton() {
   );
 }
 Widget _buildSavedEventCard(CorporateEvent event) {
-  final dateFormatted = DateFormat('MMM dd, yyyy').format(event.date);
+  final dateFormatted = DateFormat('dd MMM yyyy').format(event.date);
   final timeFormatted = DateFormat('hh:mm a').format(event.date);
+  final isExpanded = _expandedItemId == event.id;
 
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-    child: Container(
-      padding: const EdgeInsets.all(14),
+  return GestureDetector(
+    onTap: () {
+      setState(() {
+        if (_expandedItemId == event.id) {
+          _expandedItemId = null;
+        } else {
+          _expandedItemId = event.id;
+        }
+      });
+    },
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
         color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-  children: [
-    Expanded(
-      child: Text(
-        event.title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-    IconButton(
-      icon: const Icon(Icons.bookmark, color: Colors.red),
-      onPressed: () => _unsaveEvent(event.id),
-    ),
-  ],
-),
-
-          const SizedBox(height: 6),
-          Text(
-            "$dateFormatted • $timeFormatted",
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            event.description,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 4,
+              decoration: const BoxDecoration(
+                color: Color(0xFFE54350),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            event.title,
+                            style: GoogleFonts.dmSans(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              height: 32 / 20,
+                              color: const Color(0xFF333333),
+                            ),
+                          ),
+                        ),
+                        if (isExpanded) ...[
+                          const SizedBox(width: 8),
+                          GestureDetector(
+                            onTap: () => _unsaveEvent(event.id),
+                            child: const Icon(
+                              Icons.bookmark,
+                              color: Color(0xFFE54350),
+                              size: 24,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      event.description,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 24 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                      textAlign: TextAlign.justify,
+                      maxLines: isExpanded ? null : 2,
+                      overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 12),
+                    if (!isExpanded)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              dateFormatted,
+                              style: GoogleFonts.dmSans(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFFE54350),
+                              ),
+                            ),
+                          ),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Color(0xFF94A3B8),
+                            size: 24,
+                          ),
+                        ],
+                      ),
+                    if (isExpanded) ...[
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 1,
+                        color: const Color(0xFFE2E8F0),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.access_time_outlined,
+                            size: 16,
+                            color: Color(0xFFE54350),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            timeFormatted,
+                            style: GoogleFonts.dmSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF64748B),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 16,
+                            color: Color(0xFFE54350),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            dateFormatted,
+                            style: GoogleFonts.dmSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF64748B),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -752,181 +868,205 @@ Widget _buildSavedEventCard(CorporateEvent event) {
 Widget _buildArticleCard(Article a) {
   final dateFormatted = DateFormat.yMMMd().add_jm().format(a.date);
 
-  Color sentimentColor(String s) {
-    switch (s.toLowerCase()) {
-      case "very bullish": return const Color(0xFF0F9D58);
-      case "bullish": return const Color(0xFF5AD079);
-      case "neutral": return const Color(0xFFA6A49A);
-      case "bearish": return const Color(0xFFEB6969);
-      case "very bearish": return const Color(0xFFD93025);
-      default: return Colors.grey;
-    }
-  }
-
-  Color impactColor(String i) {
-    switch (i.toLowerCase()) {
-      case "very high": return const Color(0xFFFFB000);
-      case "high": return const Color(0xFFFF9B5B);
-      case "mild": return const Color(0xFFFFCD79);
-      case "negligible": return const Color(0xFFFFCEAF);
-      default: return Colors.grey;
-    }
-  }
-
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.75,
     child: InkWell(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(12),
       onTap: () => _showFullStory(a),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            /// TITLE
             Text(
               a.title,
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+              style: GoogleFonts.dmSans(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                color: const Color(0xFF333333),
               ),
             ),
-
-            const SizedBox(height: 12),
-
-            /// SUMMARY (SCROLLABLE)
+            const SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   a.summary,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    height: 1.5,
+                  textAlign: TextAlign.justify,
+                  style: GoogleFonts.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 22.75 / 14,
+                    color: const Color(0xFF555555),
                   ),
                 ),
               ),
             ),
-
-            const SizedBox(height: 12),
-
-            /// MARKET INFO
+            const SizedBox(height: 8),
             if (a.companies.isNotEmpty)
-              Text(
-                "Companies: ${a.companies.join(', ')}",
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Companies: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.companies.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               )
             else if (a.sector_market.isNotEmpty)
-              Text(
-                "Sector: ${a.sector_market}",
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Sector: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.sector_market,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               )
             else if (a.commodities_market.isNotEmpty)
-              Text(
-                "Commodity: ${a.commodities_market.join(', ')}",
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Commodity: ",
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                    TextSpan(
+                      text: a.commodities_market.join(', '),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: const Color(0xFF555555),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-
-            const SizedBox(height: 8),
-
-            /// SENTIMENT
+            const SizedBox(height: 6),
             if (a.sentiment.isNotEmpty)
               Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
                       text: "Sentiment: ",
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
+                        color: const Color(0xFF333333),
                       ),
                     ),
                     TextSpan(
                       text: a.sentiment,
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: sentimentColor(a.sentiment),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: _getSentimentColor(a.sentiment),
                       ),
                     ),
                   ],
                 ),
               ),
-
-            /// IMPACT
+            if (a.sentiment.isNotEmpty && a.impact.isNotEmpty)
+              const SizedBox(height: 6),
             if (a.impact.isNotEmpty)
               Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
                       text: "Impact: ",
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
+                        height: 20 / 14,
+                        letterSpacing: 0,
+                        color: const Color(0xFF333333),
                       ),
                     ),
                     TextSpan(
                       text: a.impact,
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: impactColor(a.impact),
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 14,
+                        color: _getImpactColor(a.impact),
                       ),
                     ),
                   ],
                 ),
               ),
-
-            const SizedBox(height: 14),
-
-            /// FOOTER
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
                 Text(
                   dateFormatted,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.manrope(
                     fontSize: 11,
-                    color: Colors.grey,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF8A8A8A),
                   ),
                 ),
-
                 Row(
                   children: [
-
-                    /// TRADINGVIEW
                     if (a.companies.isNotEmpty)
                       IconButton(
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         icon: Image.asset(
                           "assets/tradingview.png",
-                          height: 32,
-                          width: 32,
+                          height: 28,
+                          width: 28,
                         ),
                         onPressed: () async {
                           final companies =
@@ -941,15 +1081,14 @@ Widget _buildArticleCard(Article a) {
                           }
                         },
                       ),
-
-                    /// UNSAVE
+                    const SizedBox(width: 6),
                     IconButton(
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                       icon: const Icon(
                         Icons.bookmark,
-                        size: 32,
-                        color: Colors.red,
+                        size: 28,
+                        color: Color(0xFFE54350),
                       ),
                       onPressed: () => _unsaveNews(a.id),
                     ),
@@ -962,6 +1101,149 @@ Widget _buildArticleCard(Article a) {
       ),
     ),
   );
+}
+
+Color _getSentimentColor(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFF0F9D58);
+    case "bullish":
+      return const Color(0xFF5AD079);
+    case "neutral":
+      return const Color(0xFFA6A49A);
+    case "bearish":
+      return const Color(0xFFEB6969);
+    case "very bearish":
+      return const Color(0xFFD93025);
+    default:
+      return const Color(0xFF555555);
+  }
+}
+
+Color _getImpactColor(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFFFB000);
+    case "high":
+      return const Color(0xFFFF9B5B);
+    case "mild":
+      return const Color(0xFFFFCD79);
+    case "negligible":
+      return const Color(0xFFFFCEAF);
+    default:
+      return const Color(0xFF555555);
+  }
+}
+
+Color _getSentimentBg(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFFE8F5E9);
+    case "bullish":
+      return const Color(0xFFE8F5E9);
+    case "neutral":
+      return const Color(0xFFF5F5F5);
+    case "bearish":
+      return const Color(0xFFFFEBEE);
+    case "very bearish":
+      return const Color(0xFFFFEBEE);
+    default:
+      return const Color(0xFFF5F5F5);
+  }
+}
+
+Color _getSentimentBorder(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFF66BB6A);
+    case "bullish":
+      return const Color(0xFF81C784);
+    case "neutral":
+      return const Color(0xFFBDBDBD);
+    case "bearish":
+      return const Color(0xFFEF5350);
+    case "very bearish":
+      return const Color(0xFFE53935);
+    default:
+      return const Color(0xFFBDBDBD);
+  }
+}
+
+Color _getDarkerSentiment(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+      return const Color(0xFF2E7D32);
+    case "bullish":
+      return const Color(0xFF388E3C);
+    case "neutral":
+      return const Color(0xFF616161);
+    case "bearish":
+      return const Color(0xFFC62828);
+    case "very bearish":
+      return const Color(0xFFB71C1C);
+    default:
+      return Colors.grey;
+  }
+}
+
+Color _getImpactBg(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFFFF3E0);
+    case "high":
+      return const Color(0xFFFFF3E0);
+    case "mild":
+      return const Color(0xFFFFFBF0);
+    case "negligible":
+      return const Color(0xFFFFFBF0);
+    default:
+      return const Color(0xFFF5F5F5);
+  }
+}
+
+Color _getImpactBorder(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFFF9800);
+    case "high":
+      return const Color(0xFFFFB74D);
+    case "mild":
+      return const Color(0xFFFFD54F);
+    case "negligible":
+      return const Color(0xFFFFE082);
+    default:
+      return const Color(0xFFBDBDBD);
+  }
+}
+
+Color _getDarkerImpact(String i) {
+  switch (i.toLowerCase()) {
+    case "very high":
+      return const Color(0xFFE65100);
+    case "high":
+      return const Color(0xFFF57C00);
+    case "mild":
+      return const Color(0xFFFFA000);
+    case "negligible":
+      return const Color(0xFFFFB300);
+    default:
+      return Colors.grey;
+  }
+}
+
+IconData _getSentimentIcon(String s) {
+  switch (s.toLowerCase()) {
+    case "very bullish":
+    case "bullish":
+      return Icons.trending_up;
+    case "neutral":
+      return Icons.trending_flat;
+    case "bearish":
+    case "very bearish":
+      return Icons.trending_down;
+    default:
+      return Icons.circle;
+  }
 }
 
   BottomNavigationBarItem _navItem({
