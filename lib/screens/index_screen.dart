@@ -1080,44 +1080,6 @@ Widget build(BuildContext context) {
   return Scaffold(
   backgroundColor: Colors.grey.shade100,
 
-  /// TOP BAR
-  appBar: AppBar(
-    backgroundColor: const Color(0xFFF05151),
-    elevation: 0,
-    title: Text(
-      "Index",
-      style: GoogleFonts.poppins(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
-      ),
-    ),
-    actions: [
-      Padding(
-        padding: const EdgeInsets.only(right: 16),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const ProfileScreen(),
-              ),
-            );
-          },
-          child: const CircleAvatar(
-            radius: 18,
-            backgroundColor: Color(0xFFE0E0E0),
-            child: Icon(
-              Icons.person,
-              size: 18,
-              color: Color(0xFF757575),
-            ),
-          ),
-        ),
-      )
-    ],
-  ),
-
   bottomNavigationBar: Container(
   decoration: const BoxDecoration(
     color: Colors.white,
@@ -1220,6 +1182,57 @@ Widget build(BuildContext context) {
       child: ListView(
         children: [
 
+          /// TOP BAR WITH SEARCH AND PROFILE
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF6B3B3),
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            decoration: const InputDecoration(
+                              hintText: "Search here...",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.search),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                    );
+                  },
+                  child: const CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Color(0xFFE0E0E0),
+                    child: Icon(
+                      Icons.person,
+                      size: 18,
+                      color: Color(0xFF757575),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           /// TABS
           Container(
             height: 50,
@@ -1291,7 +1304,7 @@ Widget build(BuildContext context) {
             ListView.builder(
   shrinkWrap: true,
   physics: const NeverScrollableScrollPhysics(),
-  padding: const EdgeInsets.symmetric(horizontal: 12),
+  padding: const EdgeInsets.symmetric(horizontal: 16),
   itemCount: isGlobal ? globalData.length : sectorData.length,
   itemBuilder: (_, i) {
 
@@ -1299,121 +1312,79 @@ Widget build(BuildContext context) {
     final chartSpots = getMiniSpots(g["chart"]);
     final price = (g["price"] ?? 0).toDouble();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// HEADER - NAME AND BOOKMARK
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 g["name"] ?? "",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.poppins(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade700,
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                price.toStringAsFixed(2),
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Icon(
+                  Icons.bookmark_border,
+                  size: 18,
+                  color: Colors.grey.shade600,
                 ),
               ),
             ],
           ),
-        ),
 
-        const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.all(10),
-          height: 300,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
+          /// PRICE
+          Text(
+            "₹${price.toStringAsFixed(2)}",
+            style: GoogleFonts.poppins(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(right: 10),
+
+          const SizedBox(height: 12),
+
+          /// MINI CHART
+          SizedBox(
+            height: 100,
             child: chartSpots.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : LineChart(
                     LineChartData(
                       gridData: FlGridData(show: false),
                       borderData: FlBorderData(show: false),
-                      lineTouchData: LineTouchData(
-                        touchTooltipData: LineTouchTooltipData(
-                          tooltipBgColor: Colors.black,
-                        ),
-                      ),
-                      extraLinesData: ExtraLinesData(
-                        horizontalLines: [
-                          HorizontalLine(
-                            y: price,
-                            color: Colors.green.withOpacity(0.4),
-                            strokeWidth: 1,
-                            dashArray: [5, 5],
-                          )
-                        ],
-                      ),
+                      lineTouchData: LineTouchData(enabled: false),
                       titlesData: FlTitlesData(
                         leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 50,
-                            interval: chartSpots.isEmpty ? 100 : (chartSpots.map((e) => e.y).reduce((a, b) => a > b ? a : b) - chartSpots.map((e) => e.y).reduce((a, b) => a < b ? a : b)) / 4,
-                            getTitlesWidget: (value, meta) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 4),
-                                child: Text(
-                                  value.toStringAsFixed(0),
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                          sideTitles: SideTitles(showTitles: false),
                         ),
                         bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 40,
-                            interval: 1,
-                            getTitlesWidget: (value, meta) {
-                              int index = value.toInt();
-                              if (index < 0 || index >= chartSpots.length) {
-                                return const SizedBox();
-                              }
-                              final rawDate = g["chart"][index]["date"];
-                              DateTime date;
-                              if (rawDate is int) {
-                                date = DateTime.fromMillisecondsSinceEpoch(rawDate * 1000);
-                              } else {
-                                date = DateTime.tryParse(rawDate.toString()) ?? DateTime.now();
-                              }
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 6),
-                                child: Transform.rotate(
-                                  angle: -0.75,
-                                  child: Text(
-                                    DateFormat("d MMM").format(date),
-                                    style: const TextStyle(
-                                      fontSize: 8,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                          sideTitles: SideTitles(showTitles: false),
                         ),
                         topTitles: AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
@@ -1427,65 +1398,133 @@ Widget build(BuildContext context) {
                       lineBarsData: [
                         LineChartBarData(
                           spots: chartSpots,
-                          isCurved: false,
-                          barWidth: 3,
-                          color: Colors.green,
-                          dotData: FlDotData(
-                            show: true,
-                            getDotPainter: (spot, percent, barData, index) {
-                              return FlDotCirclePainter(
-                                radius: 3,
-                                color: Colors.green,
-                                strokeWidth: 1.5,
-                                strokeColor: Colors.white,
-                              );
-                            },
-                          ),
-                          belowBarData: BarAreaData(
-                            show: true,
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.green.withOpacity(0.4),
-                                Colors.green.withOpacity(0.05),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                          ),
+                          isCurved: true,
+                          barWidth: 2.5,
+                          color: const Color(0xFF4DD0E1),
+                          dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(show: false),
                         ),
                       ],
                     ),
                   ),
           ),
-        ),
 
-        const SizedBox(height: 20),
-      ],
+          const SizedBox(height: 8),
+
+          /// TIME LABELS
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "6:15 AM",
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              Text(
+                "10:30 PM",
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              Text(
+                "3:30 PM",
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   },
 ),
           /// NORMAL INDEX UI (ONLY FOR NIFTY AND BANK NIFTY)
           if (!isGlobal && !isSector && _tabIndex != 4) ...[
 
-  Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 12),
-    child: Text(
-      price.toStringAsFixed(2),
-      style: const TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-      ),
+  /// INDEX PRICE CARD
+  Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _tabIndex == 0 ? "NIFTY" : "BANK NIFTY",
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "₹${price.toStringAsFixed(2)}",
+              style: GoogleFonts.poppins(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              "+52.00",
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.bookmark_border,
+            size: 22,
+            color: Colors.grey.shade600,
+          ),
+        ),
+      ],
     ),
   ),
 
+  /// CHART CARD
   Container(
-    margin: const EdgeInsets.symmetric(horizontal: 12),
-    padding: const EdgeInsets.all(10),
-    height: 300,
+    margin: const EdgeInsets.symmetric(horizontal: 16),
+    padding: const EdgeInsets.all(16),
+    height: 250,
     decoration: BoxDecoration(
-      border: Border.all(color: Colors.grey.shade300),
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(16),
       color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
     ),
     child: Padding(
       padding: const EdgeInsets.only(right: 10),
@@ -1626,178 +1665,199 @@ Widget build(BuildContext context) {
               )
             ),
 
-           /// SHOW ONLY FOR NIFTY TAB
+           /// SHOW TOP GAINERS/LOSERS ONLY FOR NIFTY TAB (NOT BANK NIFTY)
 if (_tabIndex == 0) ...[
   
-
-  const SizedBox(height: 10),
+  const SizedBox(height: 16),
   
-
+  /// TOP GAINERS SECTION
   Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 12),
+    padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Text(
-      "TOP GAINERS / LOSERS",
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.grey.shade700,
+      "Top Gainers",
+      style: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
       ),
     ),
   ),
 
+  const SizedBox(height: 12),
+
   Container(
-    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    margin: const EdgeInsets.symmetric(horizontal: 16),
+    padding: const EdgeInsets.all(12),
     decoration: BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: Colors.grey.shade300),
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
     ),
     child: Column(
       children: [
-
-        /// HEADER
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          child: Row(
-            children: const [
-              Expanded(
-                flex: 3,
-                child: Text(
-                  "COMPANY",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  "VALUE",
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  "CHANGE",
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        Divider(height: 1),
-        
-        /// TOP GAINERS LABEL
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          color: Colors.green.shade50,
-          child: Row(
-            children: [
-              Icon(Icons.trending_up, color: Colors.green.shade700, size: 18),
-              const SizedBox(width: 8),
-              Text(
-                "Top Gainers",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green.shade700,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-        
-
-        /// ROWS
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: displayGainers.length + displayLosers.length + 1, // +1 for Top Losers label
+          itemCount: displayGainers.length,
           itemBuilder: (_, i) {
-            
-            // Show Top Losers label after gainers
-            if (i == displayGainers.length) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                color: Colors.red.shade50,
-                child: Row(
-                  children: [
-                    Icon(Icons.trending_down, color: Colors.red.shade700, size: 18),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Top Losers",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red.shade700,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            final isGainer = i < displayGainers.length;
-            final adjustedIndex = i > displayGainers.length ? i - 1 : i;
-
-            final m = isGainer
-                ? displayGainers[adjustedIndex]
-                : displayLosers[adjustedIndex - displayGainers.length];
-
+            final m = displayGainers[i];
             final change = (m["pChange"] ?? 0).toDouble();
 
             return Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 12, vertical: 12),
-              decoration: const BoxDecoration(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: Color(0xFFE5E5E5)),
+                  bottom: i < displayGainers.length - 1
+                      ? BorderSide(color: Colors.grey.shade200)
+                      : BorderSide.none,
                 ),
               ),
               child: Row(
                 children: [
-
                   Expanded(
                     flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          m["symbol"] ?? "",
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          "₹${m["lastPrice"]}",
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green.shade50,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
                     child: Text(
-                      m["symbol"] ?? "",
-                      style: const TextStyle(
+                      "+${change.toStringAsFixed(2)}%",
+                      style: GoogleFonts.poppins(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
+                        color: Colors.green.shade700,
                       ),
                     ),
                   ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    ),
+  ),
 
+  const SizedBox(height: 16),
+
+  /// TOP LOSERS SECTION
+  Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Text(
+      "Top Losers",
+      style: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
+
+  const SizedBox(height: 12),
+
+  Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16),
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      children: [
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: displayLosers.length,
+          itemBuilder: (_, i) {
+            final m = displayLosers[i];
+            final change = (m["pChange"] ?? 0).toDouble();
+
+            return Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: i < displayLosers.length - 1
+                      ? BorderSide(color: Colors.grey.shade200)
+                      : BorderSide.none,
+                ),
+              ),
+              child: Row(
+                children: [
                   Expanded(
-                    flex: 2,
-                    child: Text(
-                      "${m["lastPrice"]}",
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          m["symbol"] ?? "",
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          "₹${m["lastPrice"]}",
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-
-                  Expanded(
-                    flex: 2,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
                     child: Text(
                       "${change.toStringAsFixed(2)}%",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: change >= 0
-                            ? Colors.green
-                            : Colors.red,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red.shade700,
                       ),
                     ),
                   ),
