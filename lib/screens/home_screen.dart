@@ -933,23 +933,20 @@ else if (a.commodities_market.isNotEmpty) ...[
 
   // ------------------------- UI -------------------------
   Widget _buildTopSearchRow() {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+final bool isSmallPhone = screenWidth < 360;
+final bool isTablet = screenWidth > 600;
     return Container(
-      height: 64,
+      height: isTablet
+    ? 64
+    : (isSmallPhone ? 48 : 56),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: Colors.white,
       child: Row(
         children: [
-          // Hamburger Menu Icon
-          IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF333333), size: 24),
-            onPressed: () {
-              // TODO: Open drawer/menu
-            },
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
           
-          const SizedBox(width: 12),
+          
           
           // Search Bar
           Expanded(
@@ -968,6 +965,7 @@ else if (a.commodities_market.isNotEmpty) ...[
                   Expanded(
                     child: TextField(
                       controller: _searchController,
+                      cursorColor: const Color(0xFFE54350),
                       style: GoogleFonts.manrope(
                         fontSize: 12,
                         color: const Color(0xFF333333),
@@ -1016,16 +1014,19 @@ else if (a.commodities_market.isNotEmpty) ...[
 
 Widget _buildTabsRow() {
   final tabs = ["LATEST", "TRENDING", "GLOBAL", "COMMODITIES"];
+  final screenWidth = MediaQuery.of(context).size.width;
+  final bool isSmallPhone = screenWidth < 360;
+  final bool isTablet = screenWidth > 600;
 
   return Container(
     color: Colors.white,
     child: Column(
       children: [
         SizedBox(
-          height: 47,
+          height: isTablet ? 52 : (isSmallPhone ? 42 : 47),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: isTablet ? 20 : 16),
             itemCount: tabs.length,
             itemBuilder: (context, idx) {
               final selected = idx == _tabIndex;
@@ -1033,27 +1034,24 @@ Widget _buildTabsRow() {
               return GestureDetector(
                 onTap: () => _onTabChange(idx),
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 18),
+                  padding: EdgeInsets.only(right: isTablet ? 24 : 18),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                     Text(
-  tabs[idx],
-  style: GoogleFonts.manrope(
-    fontSize: 12,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 0.65,
-    height: 19.5 / 12,
-    color: selected
-        ?const Color(0xFFE54350)
-        : const Color(0xFF9AA0AE),
-  ),
-),
-
+                      Text(
+                        tabs[idx],
+                        style: GoogleFonts.manrope(
+                          fontSize: isTablet ? 14 : (isSmallPhone ? 11 : 12),
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.65,
+                          height: 19.5 / 12,
+                          color: selected
+                              ? const Color(0xFFE54350)
+                              : const Color(0xFF9AA0AE),
+                        ),
+                      ),
                       const SizedBox(height: 2),
-
-                      /// ✅ underline EXACTLY same width as text
                       Container(
                         height: 1.5,
                         decoration: BoxDecoration(
@@ -1061,14 +1059,15 @@ Widget _buildTabsRow() {
                               ? const Color(0xFFE54350)
                               : Colors.transparent,
                         ),
-                       width: _textWidth(
-  tabs[idx],
-  GoogleFonts.manrope(
-    fontSize: 12,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 0.65,
-  ),
-) - 4,
+                        width: _textWidth(
+                              tabs[idx],
+                              GoogleFonts.manrope(
+                                fontSize: isTablet ? 14 : (isSmallPhone ? 11 : 12),
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.65,
+                              ),
+                            ) -
+                            4,
                       ),
                     ],
                   ),
@@ -1077,8 +1076,7 @@ Widget _buildTabsRow() {
             },
           ),
         ),
-
-        const Divider(height: 1, thickness: 0.6,color: Color(0xFFE9E9E9)),
+        const Divider(height: 1, thickness: 0.6, color: Color(0xFFE9E9E9)),
       ],
     ),
   );
@@ -1100,7 +1098,7 @@ double _textWidth(String text, TextStyle style) {
   Widget _buildFeed() {
   if (_isLoading) {
     return const Expanded(
-      child: Center(child: CircularProgressIndicator()),
+      child: Center(child: CircularProgressIndicator(color: Color(0xFFE54350))),
     );
   }
 
@@ -1310,15 +1308,21 @@ Widget _buildSearchArticleCard(Article a) {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-             blurRadius: 8,
-offset: const Offset(0, 3),
 
-            ),
-          ],
+  borderRadius: BorderRadius.circular(16),
+
+  border: Border.all(
+    color: const Color(0xFFE5E7EB),
+    width: 1,
+  ),
+          boxShadow: [
+  BoxShadow(
+    color: Colors.black.withOpacity(0.08),
+    blurRadius: 12,
+    spreadRadius: 1,
+    offset: const Offset(0, 4),
+  ),
+],
         ),
         child: Column(
           crossAxisAlignment:
@@ -1498,6 +1502,10 @@ offset: const Offset(0, 3),
 }
 
 Widget _buildArticleCard(Article a) {
+  final screenWidth = MediaQuery.of(context).size.width;
+
+final bool isSmallPhone = screenWidth < 360;
+final bool isTablet = screenWidth > 600;
   final dateFormatted = DateFormat.yMMMd().add_jm().format(a.date);
 
   Color sentimentColor(String s) {
@@ -1596,14 +1604,24 @@ Widget _buildArticleCard(Article a) {
     }
   }
 
-  return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.75,
+  return Padding(
+  padding: const EdgeInsets.symmetric(
+    horizontal: 12,
+    vertical: 8,
+  ),
+
     child: InkWell(
       borderRadius: BorderRadius.circular(12),
       onTap: () => _showFullStory(a),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        padding: const EdgeInsets.all(14),
+        margin: EdgeInsets.symmetric(
+  horizontal:
+      MediaQuery.of(context).size.width * 0.04,
+  vertical: 8,
+),
+       padding: EdgeInsets.all(
+  isTablet ? 18 : (isSmallPhone ? 12 : 14),
+),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -1622,9 +1640,12 @@ Widget _buildArticleCard(Article a) {
 
             /// TITLE
             Text(
-              a.title,
-              style: GoogleFonts.dmSans(
-                fontSize: 17,
+            a.title,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.dmSans(
+              fontSize:
+                  isTablet ? 20 : (isSmallPhone ? 15 : 17),
                 fontWeight: FontWeight.w800,
                 color: const Color(0xFF333333),
               ),
@@ -1638,11 +1659,12 @@ Widget _buildArticleCard(Article a) {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   a.summary,
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.start,
                   style: GoogleFonts.manrope(
-                    fontSize: 14,
+                    fontSize:
+    isTablet ? 16 : (isSmallPhone ? 13 : 14),
                     fontWeight: FontWeight.w400,
-                    height: 22.75 / 14,
+                    height: 1.6,
                     color: const Color(0xFF555555),
                   ),
                 ),
@@ -1659,7 +1681,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: "Companies: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1668,7 +1691,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: a.companies.join(', '),
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1684,7 +1708,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: "Sector: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1693,7 +1718,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: a.sector_market,
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1709,7 +1735,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: "Commodity: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1718,7 +1745,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: a.commodities_market.join(', '),
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1738,7 +1766,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: "Sentiment: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         letterSpacing: 0,
@@ -1748,7 +1777,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: a.sentiment,
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: _getSentimentColor(a.sentiment),
@@ -1769,7 +1799,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: "Impact: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                       fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         letterSpacing: 0,
@@ -1779,7 +1810,8 @@ Widget _buildArticleCard(Article a) {
                     TextSpan(
                       text: a.impact,
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize:
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: _getImpactColor(a.impact),
@@ -1800,7 +1832,8 @@ Widget _buildArticleCard(Article a) {
                 Text(
                   dateFormatted,
                   style: GoogleFonts.manrope(
-                    fontSize: 11,
+                    fontSize:
+    isTablet ? 12 : (isSmallPhone ? 10 : 11),
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF8A8A8A),
                   ),
@@ -1819,8 +1852,11 @@ Widget _buildArticleCard(Article a) {
                         constraints: const BoxConstraints(),
                         icon: Image.asset(
                           "assets/tradingview.png",
-                          height: 28,
-                          width: 28,
+                          height:
+    isTablet ? 34 : (isSmallPhone ? 24 : 28),
+
+width:
+    isTablet ? 34 : (isSmallPhone ? 24 : 28),
                         ),
                         onPressed: () async {
                           try {
@@ -1891,7 +1927,8 @@ Widget _buildArticleCard(Article a) {
                         _locallySavedIds.contains(a.id)
                             ? Icons.bookmark
                             : Icons.bookmark_border,
-                        size: 28,
+                        size:
+    isTablet ? 34 : (isSmallPhone ? 24 : 28),
                         color: _locallySavedIds.contains(a.id)
                             ? const Color(0xFFE54350)
                             : const Color(0xFF8A8A8A),
@@ -2076,9 +2113,29 @@ IconData _getSentimentIcon(String s) {
   // ------------------------- BUILD -------------------------
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+final screenHeight = MediaQuery.of(context).size.height;
+
+final bool isSmallPhone = screenWidth < 360;
+final bool isTablet = screenWidth > 600;
+
+final double titleFont =
+    isTablet ? 20 : (isSmallPhone ? 15 : 17);
+
+final double summaryFont =
+    isTablet ? 16 : (isSmallPhone ? 13 : 14);
+
+final double sentimentFont =
+    isTablet ? 17 : (isSmallPhone ? 14 : 15.5);
+
+final double dateFont =
+    isTablet ? 12 : (isSmallPhone ? 10 : 11);
+
+final double cardPadding =
+    isTablet ? 18 : (isSmallPhone ? 12 : 14);
     return Scaffold(
       resizeToAvoidBottomInset: false, 
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color(0xFFF7F8FA),
       body: SafeArea(
         child: Column(
           children: [
@@ -2224,12 +2281,13 @@ class CompanySearchCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              ),
-            ],
+  BoxShadow(
+    color: Colors.black.withOpacity(0.08),
+    blurRadius: 16,
+    spreadRadius: 3,
+    offset: Offset.zero,
+  ),
+],
           ),
           child: Row(
             children: [

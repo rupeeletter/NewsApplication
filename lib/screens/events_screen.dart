@@ -794,7 +794,7 @@ Future<void> _loadSavedNewsIds() async {
 Widget _buildIpoTab() {
   if (_isIpoLoading) {
     return const Center(
-      child: CircularProgressIndicator(color: Color(0xFFF05151)),
+      child: CircularProgressIndicator(color: Color(0xFFE54350)),
     );
   }
 
@@ -837,13 +837,14 @@ Widget _buildIpoTab() {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
+      backgroundColor: const Color(0xFFF7F8FA),
       body: SafeArea(
         child: Column(
           children: [
             // Search Bar Header
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               color: Colors.white,
               child: Row(
                 children: [
@@ -851,33 +852,34 @@ Widget _buildIpoTab() {
                     child: Container(
                       height: 48,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF8F8F8),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: const Color(0xFFE5E5E5), width: 1),
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
                           const Icon(
                             Icons.search,
-                            color: Color(0xFFE54350),
-                            size: 22,
+                            color: Color(0xFFB7B7B7),
+                            size: 20,
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: TextField(
                               style: GoogleFonts.manrope(
-                                fontSize: 14,
-                                color: const Color(0xFF1E293B),
+                                fontSize: 12,
+                                color: const Color(0xFF333333),
                               ),
                               decoration: InputDecoration(
-                                hintText: "Search markets, news, global trends...",
+                                hintText: "Search here...",
                                 hintStyle: GoogleFonts.manrope(
-                                  fontSize: 14,
-                                  color: const Color(0xFF94A3B8),
+                                  fontSize: 12,
+                                  color: const Color(0xFFB7B7B7),
                                 ),
                                 border: InputBorder.none,
                                 isDense: true,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                                contentPadding: EdgeInsets.zero,
                               ),
                             ),
                           ),
@@ -897,7 +899,7 @@ Widget _buildIpoTab() {
                       child: Icon(
                         Icons.person,
                         size: 20,
-                        color: Color(0xFF64748B),
+                        color: Color(0xFF757575),
                       ),
                     ),
                   ),
@@ -911,7 +913,7 @@ Widget _buildIpoTab() {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 52,
+                    height: 47,
                     child: Row(
                       children: _tabs.asMap().entries.map((entry) {
                         final index = entry.key;
@@ -926,25 +928,23 @@ Widget _buildIpoTab() {
                               children: [
                                 Text(
                                   tab.toUpperCase(),
-                                  style: GoogleFonts.dmSans(
-                                    fontSize: 13,
+                                  style: GoogleFonts.manrope(
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.5,
+                                    letterSpacing: 0.65,
+                                    height: 19.5 / 12,
                                     color: selected
                                         ? const Color(0xFFE54350)
-                                        : const Color(0xFF94A3B8),
+                                        : const Color(0xFF9AA0AE),
                                   ),
                                 ),
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 2),
                                 Container(
-                                  height: 3,
+                                  height: 1.5,
                                   decoration: BoxDecoration(
                                     color: selected
                                         ? const Color(0xFFE54350)
                                         : Colors.transparent,
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(3),
-                                    ),
                                   ),
                                 ),
                               ],
@@ -954,11 +954,7 @@ Widget _buildIpoTab() {
                       }).toList(),
                     ),
                   ),
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: Color(0xFFE2E8F0),
-                  ),
+                  const Divider(height: 1, thickness: 0.6, color: Color(0xFFE9E9E9)),
                 ],
               ),
             ),
@@ -1068,16 +1064,24 @@ Widget _buildIpoTab() {
   }
 
 Widget _buildIpoArticleCard(Article a) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final bool isSmallPhone = screenWidth < 360;
+  final bool isTablet = screenWidth > 600;
   final dateFormatted = DateFormat.yMMMd().add_jm().format(a.date);
 
-  return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.75,
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     child: InkWell(
       borderRadius: BorderRadius.circular(12),
       onTap: () => _showFullStory(a),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        padding: const EdgeInsets.all(14),
+        margin: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.04,
+          vertical: 8,
+        ),
+        padding: EdgeInsets.all(
+          isTablet ? 18 : (isSmallPhone ? 12 : 14),
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -1094,8 +1098,10 @@ Widget _buildIpoArticleCard(Article a) {
           children: [
             Text(
               a.title,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.dmSans(
-                fontSize: 17,
+                fontSize: isTablet ? 20 : (isSmallPhone ? 15 : 17),
                 fontWeight: FontWeight.w800,
                 color: const Color(0xFF333333),
               ),
@@ -1106,11 +1112,11 @@ Widget _buildIpoArticleCard(Article a) {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   a.summary,
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.start,
                   style: GoogleFonts.manrope(
-                    fontSize: 14,
+                    fontSize: isTablet ? 16 : (isSmallPhone ? 13 : 14),
                     fontWeight: FontWeight.w400,
-                    height: 22.75 / 14,
+                    height: 1.6,
                     color: const Color(0xFF555555),
                   ),
                 ),
@@ -1124,7 +1130,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: "Companies: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1133,7 +1139,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: a.companies.join(', '),
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1149,7 +1155,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: "Sector: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1158,7 +1164,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: a.sector_market,
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1174,7 +1180,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: "Commodity: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1183,7 +1189,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: a.commodities_market.join(', '),
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: const Color(0xFF555555),
@@ -1200,7 +1206,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: "Sentiment: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         letterSpacing: 0,
@@ -1210,7 +1216,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: a.sentiment,
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: _getSentimentColor(a.sentiment),
@@ -1228,7 +1234,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: "Impact: ",
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w700,
                         height: 20 / 14,
                         letterSpacing: 0,
@@ -1238,7 +1244,7 @@ Widget _buildIpoArticleCard(Article a) {
                     TextSpan(
                       text: a.impact,
                       style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                        fontSize: isTablet ? 17 : (isSmallPhone ? 14 : 15.5),
                         fontWeight: FontWeight.w500,
                         height: 20 / 14,
                         color: _getImpactColor(a.impact),
@@ -1254,7 +1260,7 @@ Widget _buildIpoArticleCard(Article a) {
                 Text(
                   dateFormatted,
                   style: GoogleFonts.manrope(
-                    fontSize: 11,
+                    fontSize: isTablet ? 12 : (isSmallPhone ? 10 : 11),
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF8A8A8A),
                   ),
@@ -1269,8 +1275,8 @@ Widget _buildIpoArticleCard(Article a) {
                         constraints: const BoxConstraints(),
                         icon: Image.asset(
                           "assets/tradingview.png",
-                          height: 28,
-                          width: 28,
+                          height: isTablet ? 34 : (isSmallPhone ? 24 : 28),
+                          width: isTablet ? 34 : (isSmallPhone ? 24 : 28),
                         ),
                         onPressed: () async {
                           try {
@@ -1321,7 +1327,7 @@ Widget _buildIpoArticleCard(Article a) {
                         _locallySavedIds.contains(a.id)
                             ? Icons.bookmark
                             : Icons.bookmark_border,
-                        size: 28,
+                        size: isTablet ? 34 : (isSmallPhone ? 24 : 28),
                         color: _locallySavedIds.contains(a.id)
                             ? const Color(0xFFE54350)
                             : const Color(0xFF8A8A8A),

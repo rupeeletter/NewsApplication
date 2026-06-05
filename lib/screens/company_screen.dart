@@ -108,66 +108,87 @@ class _CompanyScreenState extends State<CompanyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F7FA),
-      appBar: AppBar(
-        title: const Text("Companies"),
-        backgroundColor: const Color(0xFFEA6B6B),
-        foregroundColor: Colors.white,
-        actions: [
-          GestureDetector(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen())),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: CircleAvatar(
-  radius: 18,
-  backgroundColor: Color(0xFFE0E0E0),
-  child: Icon(
-    Icons.person,
-    size: 18,
-    color: Color(0xFF757575),
-  ),
-),
-            ),
-          ),
-        ],
-      ),
+      backgroundColor: const Color(0xFFF7F8FA),
       body: SafeArea(
         child: Column(
           children: [
-            // Search Bar
-            Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  child: Container(
-    height: 50,
-    decoration: BoxDecoration(
-      color: const Color(0xFFF6B3B3),
-      borderRadius: BorderRadius.circular(30),
-    ),
-    child: TextField(
-      controller: _searchController,
-      onChanged: (value) => _applySearch(),
-      decoration: InputDecoration(
-        hintText: "Search company or symbol...",
-        hintStyle: const TextStyle(color: Colors.black54),
-        prefixIcon: const Icon(Icons.search, color: Colors.black54),
-        suffixIcon: _searchController.text.isNotEmpty
-            ? IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  _searchController.clear();
-                  _applySearch();
-                },
-              )
-            : null,
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
-      ),
-    ),
-  ),
-),    // Company List
+            // Search Bar and Profile
+            Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: const Color(0xFFE5E5E5), width: 1),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.search, color: Color(0xFFB7B7B7), size: 20),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: _searchController,
+                              onChanged: (value) => _applySearch(),
+                              style: GoogleFonts.manrope(
+                                fontSize: 12,
+                                color: const Color(0xFF333333),
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Search here...",
+                                hintStyle: GoogleFonts.manrope(
+                                  fontSize: 12,
+                                  color: const Color(0xFFB7B7B7),
+                                ),
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                            ),
+                          ),
+                          if (_searchController.text.isNotEmpty)
+                            IconButton(
+                              icon: const Icon(Icons.close, size: 18, color: Color(0xFFB7B7B7)),
+                              onPressed: () {
+                                _searchController.clear();
+                                _applySearch();
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                      );
+                    },
+                    child: const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Color(0xFFE0E0E0),
+                      child: Icon(
+                        Icons.person,
+                        size: 20,
+                        color: Color(0xFF757575),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),    // Company List
             Expanded(
               child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator(color: Color(0xFFE54350)))
                   : _error.isNotEmpty
                       ? Center(
                           child: Column(
@@ -390,7 +411,7 @@ class _CompanyListItemState extends State<CompanyListItem> {
                 const SizedBox(
                   width: 20,
                   height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE54350)),
                 )
               else if (stockData != null)
                 Column(

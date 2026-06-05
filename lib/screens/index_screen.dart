@@ -968,6 +968,9 @@ double _textWidth(String text, TextStyle style) {
 
  Widget tab(String title, String symbol, int index) {
   bool active = _tabIndex == index;
+  final screenWidth = MediaQuery.of(context).size.width;
+  final bool isSmallPhone = screenWidth < 360;
+  final bool isTablet = screenWidth > 600;
 
   return GestureDetector(
     onTap: () {
@@ -1013,7 +1016,7 @@ double _textWidth(String text, TextStyle style) {
       });
     },
     child: Padding(
-      padding: const EdgeInsets.only(right: 12),
+      padding: EdgeInsets.only(right: isTablet ? 16 : 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1022,33 +1025,34 @@ double _textWidth(String text, TextStyle style) {
           /// TAB TEXT
           Text(
             title,
-            style: GoogleFonts.poppins(
-              fontSize: 13,
-              fontWeight:
-                  active ? FontWeight.w600 : FontWeight.w400,
+            style: GoogleFonts.manrope(
+              fontSize: isTablet ? 14 : (isSmallPhone ? 11 : 12),
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.65,
+              height: 19.5 / 12,
               color: active
-                  ? const Color(0xFFEA6B6B)
-                  : Colors.black54,
+                  ? const Color(0xFFE54350)
+                  : const Color(0xFF9AA0AE),
             ),
           ),
 
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
 
           /// UNDERLINE
           Container(
-            height: 2,
+            height: 1.5,
             width: _textWidth(
               title,
-              GoogleFonts.poppins(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+              GoogleFonts.manrope(
+                fontSize: isTablet ? 14 : (isSmallPhone ? 11 : 12),
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.65,
               ),
-            ),
+            ) - 4,
             color: active
-                ? const Color(0xFFEA6B6B)
+                ? const Color(0xFFE54350)
                 : Colors.transparent,
           ),
-          const Divider(height: 1, thickness: 0.8),
         ],
       ),
     ),
@@ -1078,7 +1082,7 @@ Widget build(BuildContext context) {
   final List displayLosers = losers;
 
   return Scaffold(
-  backgroundColor: Colors.grey.shade100,
+  backgroundColor: const Color(0xFFF7F8FA),
 
   bottomNavigationBar: Container(
   decoration: const BoxDecoration(
@@ -1183,30 +1187,44 @@ Widget build(BuildContext context) {
         children: [
 
           /// TOP BAR WITH SEARCH AND PROFILE
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.white,
             child: Row(
               children: [
                 Expanded(
                   child: Container(
                     height: 48,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF6B3B3),
-                      borderRadius: BorderRadius.circular(28),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: const Color(0xFFE5E5E5), width: 1),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
+                        const Icon(Icons.search, color: Color(0xFFB7B7B7), size: 20),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
                             controller: _searchController,
-                            decoration: const InputDecoration(
+                            style: GoogleFonts.manrope(
+                              fontSize: 12,
+                              color: const Color(0xFF333333),
+                            ),
+                            decoration: InputDecoration(
                               hintText: "Search here...",
+                              hintStyle: GoogleFonts.manrope(
+                                fontSize: 12,
+                                color: const Color(0xFFB7B7B7),
+                              ),
                               border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
                             ),
                           ),
                         ),
-                        const Icon(Icons.search),
                       ],
                     ),
                   ),
@@ -1220,11 +1238,11 @@ Widget build(BuildContext context) {
                     );
                   },
                   child: const CircleAvatar(
-                    radius: 18,
+                    radius: 20,
                     backgroundColor: Color(0xFFE0E0E0),
                     child: Icon(
                       Icons.person,
-                      size: 18,
+                      size: 20,
                       color: Color(0xFF757575),
                     ),
                   ),
@@ -1235,20 +1253,24 @@ Widget build(BuildContext context) {
 
           /// TABS
           Container(
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
+            color: Colors.white,
+            child: Column(
               children: [
-                tab("NIFTY", "^NSEI", 0),
-                const SizedBox(width: 8),
-                tab("BANK NIFTY", "^NSEBANK", 1),
-                const SizedBox(width: 8),
-                tab("SECTORS", "^CNXIT", 2),
-                const SizedBox(width: 8),
-                tab("GLOBAL", "^DJI", 3),
-                const SizedBox(width: 8),
-                tab("COMPANIES", "", 4),
+                SizedBox(
+                  height: 47,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: [
+                      tab("NIFTY", "^NSEI", 0),
+                      tab("BANK NIFTY", "^NSEBANK", 1),
+                      tab("SECTORS", "^CNXIT", 2),
+                      tab("GLOBAL", "^DJI", 3),
+                      tab("COMPANIES", "", 4),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1, thickness: 0.6, color: Color(0xFFE9E9E9)),
               ],
             ),
           ),
@@ -1262,27 +1284,9 @@ Widget build(BuildContext context) {
     child: Column(
       children: [
 
-        /// 🔍 SEARCH BAR
-        Container(
-          height: 45,
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: Colors.red.shade100,
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: TextField(
-            controller: _searchController,
-            decoration: const InputDecoration(
-              hintText: "Search company...",
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.search, color: Colors.red),
-            ),
-          ),
-        ),
-
         /// COMPANY LIST
         if (_companies.isEmpty && _isLoadingCompanies)
-          const Center(child: CircularProgressIndicator())
+          const Center(child: CircularProgressIndicator(color: Color(0xFFE54350)))
         else if (_searchController.text.isEmpty && _companies.isEmpty)
           const Center(child: Text("No companies found"))
         else if (_searchController.text.isNotEmpty && _filteredCompanies.isEmpty)
@@ -1329,17 +1333,30 @@ Widget build(BuildContext context) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// HEADER - NAME AND BOOKMARK
+          /// HEADER ROW - NAME, PRICE, AND BOOKMARK
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                g["name"] ?? "",
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade700,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    g["name"] ?? "",
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "₹${price.toStringAsFixed(2)}",
+                    style: GoogleFonts.poppins(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               Container(
                 padding: const EdgeInsets.all(6),
@@ -1356,24 +1373,13 @@ Widget build(BuildContext context) {
             ],
           ),
 
-          const SizedBox(height: 8),
-
-          /// PRICE
-          Text(
-            "₹${price.toStringAsFixed(2)}",
-            style: GoogleFonts.poppins(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
           const SizedBox(height: 12),
 
           /// MINI CHART
           SizedBox(
             height: 100,
             child: chartSpots.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator(color: Color(0xFFE54350)))
                 : LineChart(
                     LineChartData(
                       gridData: FlGridData(show: false),
@@ -1399,10 +1405,30 @@ Widget build(BuildContext context) {
                         LineChartBarData(
                           spots: chartSpots,
                           isCurved: true,
-                          barWidth: 2.5,
-                          color: const Color(0xFF4DD0E1),
-                          dotData: FlDotData(show: false),
-                          belowBarData: BarAreaData(show: false),
+                          barWidth: 3,
+                          color: Colors.green,
+                          dotData: FlDotData(
+                            show: true,
+                            getDotPainter: (spot, percent, barData, index) {
+                              return FlDotCirclePainter(
+                                radius: 3,
+                                color: Colors.green,
+                                strokeWidth: 1.5,
+                                strokeColor: Colors.white,
+                              );
+                            },
+                          ),
+                          belowBarData: BarAreaData(
+                            show: true,
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.green.withOpacity(0.4),
+                                Colors.green.withOpacity(0.05),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -1529,7 +1555,7 @@ Widget build(BuildContext context) {
     child: Padding(
       padding: const EdgeInsets.only(right: 10),
       child: chartData.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFFE54350)))
           : LineChart(
               LineChartData(
 
@@ -1985,7 +2011,7 @@ class OptimizedCompanyListItem extends StatelessWidget {
                 const SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE54350)),
                 )
               else ...[
                 const SizedBox(
@@ -2124,7 +2150,7 @@ class _CompanyListItemState extends State<CompanyListItem> {
                 const SizedBox(
                   width: 20,
                   height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE54350)),
                 )
               else if (stockData != null) ...[
                 Column(
