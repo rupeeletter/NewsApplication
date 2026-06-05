@@ -136,6 +136,7 @@ class _CompanyScreenState extends State<CompanyScreen> {
                             child: TextField(
                               controller: _searchController,
                               onChanged: (value) => _applySearch(),
+                              cursorColor: const Color(0xFFE54350),
                               style: GoogleFonts.manrope(
                                 fontSize: 12,
                                 color: const Color(0xFF333333),

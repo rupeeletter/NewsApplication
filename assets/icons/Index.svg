@@ -1,18 +1,8 @@
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 64 64"
-  fill="none"
-  stroke="#9CA3AF"
-  stroke-width="8"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <!-- Axes -->
-  <line x1="8" y1="8" x2="8" y2="56" />
-  <line x1="8" y1="56" x2="56" y2="56" />
-
-  <!-- Bars -->
-  <line x1="20" y1="40" x2="20" y2="47" />
-  <line x1="32" y1="30" x2="32" y2="47" />
-  <line x1="44" y1="20" x2="44" y2="47" />
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_2638_1036" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="22" height="22">
+<rect width="22" height="22" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_2638_1036)">
+<path d="M7.57456 13.0444V5.68216H10.4693V13.0444L9.02193 11.697L7.57456 13.0444ZM12.3991 14.4879V1.83264H15.2939V11.6008L12.3991 14.4879ZM2.75 17.8081V9.53168H5.64474V14.921L2.75 17.8081ZM2.75 20.166L8.97368 13.9586L12.3991 16.8939L17.8026 11.5046H16.2588V9.5798H21.0833V14.3917H19.1535V12.8519L12.4956 19.4923L9.07018 16.557L5.45175 20.166H2.75Z" fill="#64748B"/>
+</g>
 </svg>
