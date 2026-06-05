@@ -20,9 +20,7 @@ class CompanyScreen extends StatefulWidget {
 }
 
 class _CompanyScreenState extends State<CompanyScreen> {
-  final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _companies = [];
-  List<Map<String, dynamic>> _filteredCompanies = [];
   bool _isLoading = false;
   String _error = '';
   int _bottomIndex = 1;
@@ -30,33 +28,8 @@ class _CompanyScreenState extends State<CompanyScreen> {
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(_applySearch);
     _fetchCompanies();
   }
-
-  @override
-  void dispose() {
-    _searchController.removeListener(_applySearch);
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  void _applySearch() {
-  final query = _searchController.text.trim().toLowerCase();
-
-  setState(() {
-    if (query.isEmpty) {
-      _filteredCompanies = List.from(_companies);
-    } else {
-      _filteredCompanies = _companies.where((company) {
-        final name = (company["Company Name"] ?? "").toLowerCase();
-        final symbol = (company["Symbol"] ?? "").toLowerCase();
-
-        return name.contains(query) || symbol.contains(query);
-      }).toList();
-    }
-  });
-}
 
   Future<void> _fetchCompanies() async {
     setState(() {
@@ -71,7 +44,6 @@ class _CompanyScreenState extends State<CompanyScreen> {
         final data = json.decode(resp.body);
         setState(() {
           _companies = (data as List).cast<Map<String, dynamic>>();
-          _filteredCompanies = List.from(_companies);
         });
       } else {
         final errorBody = resp.body;
@@ -132,82 +104,45 @@ class _CompanyScreenState extends State<CompanyScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Search Bar
-            Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-  child: Container(
-    height: 50,
-    decoration: BoxDecoration(
-      color: const Color(0xFFF6B3B3),
-      borderRadius: BorderRadius.circular(30),
-    ),
-    child: TextField(
-      controller: _searchController,
-      onChanged: (value) => _applySearch(),
-      decoration: InputDecoration(
-        hintText: "Search company or symbol...",
-        hintStyle: const TextStyle(color: Colors.black54),
-        prefixIcon: const Icon(Icons.search, color: Colors.black54),
-        suffixIcon: _searchController.text.isNotEmpty
-            ? IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  _searchController.clear();
-                  _applySearch();
-                },
-              )
-            : null,
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
-      ),
-    ),
-  ),
-),    // Company List
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _error.isNotEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                _error,
-                                style: const TextStyle(color: Colors.red),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: _fetchCompanies,
-                                child: const Text("Retry"),
-                              ),
-                            ],
-                          ),
-                        )
-                      : _filteredCompanies.isEmpty
-                          ? const Center(child: Text("No companies found"))
-                          : RefreshIndicator(
-                              onRefresh: _fetchCompanies,
-                              child: ListView.builder(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                itemCount: _filteredCompanies.length,
-                                itemBuilder: (context, index) {
-                                  final company = _filteredCompanies[index];
-                                  final companyName = company["Company Name"] ?? "Unknown";
-                                  final symbol = company["Symbol"] ?? "";
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _error.isNotEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _error,
+                          style: const TextStyle(color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _fetchCompanies,
+                          child: const Text("Retry"),
+                        ),
+                      ],
+                    ),
+                  )
+                : _companies.isEmpty
+                    ? const Center(child: Text("No companies found"))
+                    : RefreshIndicator(
+                        onRefresh: _fetchCompanies,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          itemCount: _companies.length,
+                          itemBuilder: (context, index) {
+                            final company = _companies[index];
+                            final companyName = company["Company Name"] ?? "Unknown";
+                            final symbol = company["Symbol"] ?? "";
 
-                                  return CompanyListItem(
-                                    companyName: companyName,
-                                    symbol: symbol,
-                                  );
-                                },
-                              ),
-                            ),
-            ),
-          ],
-        ),
+                            return CompanyListItem(
+                              companyName: companyName,
+                              symbol: symbol,
+                            );
+                          },
+                        ),
+                      ),
       ),
        bottomNavigationBar: Container(
   decoration: const BoxDecoration(

@@ -48,6 +48,8 @@ flutter:
   assets:
     - assets/icons/
     - assets/tradingview.png
+    - assets/new_logo.png
+    - assets/google_logo.png
     - LOGO 1024x1024.png
     - UI branding with tg.png
     - .env

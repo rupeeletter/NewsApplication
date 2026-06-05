@@ -263,20 +263,52 @@ Future<void> saveFcmTokenToBackend(String userId) async {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               children: [
-                const SizedBox(height: 30),
-
-                Image.asset(
-                  'LOGO 1024x1024.png',
-                  width: 70,
-                  height: 70,
-                ),
-
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
 
                 Text(
-                  'By continuing, you agree to our Terms of\nServices and Privacy Policy',
+                  'Login',
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFFE85D75),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Image.asset(
+                  'assets/new_logo.png',
+                  width: 100,
+                  height: 100,
+                ),
+
+                const SizedBox(height: 16),
+
+                RichText(
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey.shade600),
+                  text: TextSpan(
+                    style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey.shade600),
+                    children: [
+                      const TextSpan(text: 'By continuing, you agree to our '),
+                      TextSpan(
+                        text: 'Terms of Services',
+                        style: GoogleFonts.poppins(
+                          fontSize: 10,
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      const TextSpan(text: ' and '),
+                      TextSpan(
+                        text: 'Privacy Policy',
+                        style: GoogleFonts.poppins(
+                          fontSize: 10,
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 20),
@@ -338,29 +370,13 @@ Future<void> saveFcmTokenToBackend(String userId) async {
 
                       const SizedBox(height: 14),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Password',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              'Forgot Password?',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11,
-                                color: const Color(0xFFE85D75),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'Password',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       const SizedBox(height: 6),
 
@@ -465,13 +481,10 @@ Future<void> saveFcmTokenToBackend(String userId) async {
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
-                                      'G',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ),
+                                    Image.asset(
+                                      'assets/google_logo.png',
+                                      width: 20,
+                                      height: 20,
                                     ),
                                     const SizedBox(width: 12),
                                     Text(

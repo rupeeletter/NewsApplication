@@ -1182,36 +1182,21 @@ Widget build(BuildContext context) {
       child: ListView(
         children: [
 
-          /// TOP BAR WITH SEARCH AND PROFILE
+          /// TOP BAR WITH PROFILE ONLY
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF6B3B3),
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            decoration: const InputDecoration(
-                              hintText: "Search here...",
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        const Icon(Icons.search),
-                      ],
+                  child: Text(
+                    "Index",
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -1220,11 +1205,11 @@ Widget build(BuildContext context) {
                     );
                   },
                   child: const CircleAvatar(
-                    radius: 18,
+                    radius: 20,
                     backgroundColor: Color(0xFFE0E0E0),
                     child: Icon(
                       Icons.person,
-                      size: 18,
+                      size: 20,
                       color: Color(0xFF757575),
                     ),
                   ),
@@ -1261,34 +1246,13 @@ Widget build(BuildContext context) {
     padding: const EdgeInsets.all(12),
     child: Column(
       children: [
-
-        /// 🔍 SEARCH BAR
-        Container(
-          height: 45,
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: Colors.red.shade100,
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: TextField(
-            controller: _searchController,
-            decoration: const InputDecoration(
-              hintText: "Search company...",
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.search, color: Colors.red),
-            ),
-          ),
-        ),
-
         /// COMPANY LIST
         if (_companies.isEmpty && _isLoadingCompanies)
           const Center(child: CircularProgressIndicator())
-        else if (_searchController.text.isEmpty && _companies.isEmpty)
+        else if (_companies.isEmpty)
           const Center(child: Text("No companies found"))
-        else if (_searchController.text.isNotEmpty && _filteredCompanies.isEmpty)
-          const Center(child: Text("No companies match your search"))
         else
-          ...(_searchController.text.isEmpty ? _companies : _filteredCompanies).map((company) {
+          ..._companies.map((company) {
             final companyName = company["Company Name"]?.toString() ?? "Unknown";
             final symbol = company["Symbol"]?.toString() ?? "";
 
