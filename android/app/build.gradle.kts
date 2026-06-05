@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId = "com.rupeeletter.newsapp"
 
-        minSdk = flutter.minSdkVersion
+        minSdk = 23
 
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
